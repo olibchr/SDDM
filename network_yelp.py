@@ -19,12 +19,14 @@ from os.path import isfile, join
 from scipy import misc
 
 
+N_CLASSES = 2
+
 # ################## Download and prepare the MNIST dataset ##################
 # This is just some way of getting the MNIST dataset from an online location
 # and loading it into numpy arrays. It doesn't involve Lasagne at all.
 
-dirname = '/Users/oli/Downloads/yelp_subset/'
-labelfile = '/Users/oli/Google Drive/University Leiden/Seminar Distributed Data Mining/Project/YelpPhotosMetaData/image_meta_v5.csv'
+dirname = 'imgs/'
+labelfile = 'image_meta_v5.csv'
 imagesize_y = 400
 imagesize_x = 400
 
@@ -88,21 +90,24 @@ def load_dataset():
     """
 
     # We reserve the last 100 training examples for validation.
+    size = 10
 
-    X_test = X_train[:1000]
-    y_test = y_train[:1000]
+    X_test = X_train[:size]
+    y_test = y_train[:size]
 
-    X_train = X_train[:-1000]
-    y_train = y_train[:-1000]
+    X_train = X_train[:-size]
+    y_train = y_train[:-size]
 
-    X_train, X_val = X_train[:-1000], X_train[-1000:]
-    y_train, y_val = y_train[:-1000], y_train[-1000:]
+    X_train, X_val = X_train[:-size], X_train[-size:]
+    y_train, y_val = y_train[:-size], y_train[-size:]
 
-    X_test = np.array(X_test, dtype=np.int32)
+    X_test = np.array(X_test, dtype=theano.config.floatX)
     y_test = np.array(y_test, dtype=np.int32)
-    X_train = np.array(X_train, dtype=np.int32)
+
+    X_train = np.array(X_train, dtype=theano.config.floatX)
     y_train = np.array(y_train, dtype=np.int32)
-    X_val = np.array(X_val, dtype=np.int32)
+
+    X_val = np.array(X_val, dtype=theano.config.floatX)
     y_val = np.array(y_val, dtype=np.int32)
 
     X_train = np.squeeze(X_train, axis=(1,))  # np.delete(X_train, X_train[:], 1
@@ -151,7 +156,7 @@ def build_mlp(input_var=None):
 
     # Finally, we'll add the fully-connected output layer, of 10 softmax units:
     l_out = lasagne.layers.DenseLayer(
-            l_hid2_drop, num_units=1,
+            l_hid2_drop, num_units=N_CLASSES,
             nonlinearity=lasagne.nonlinearities.softmax)
 
     # Each layer is linked to its incoming layer(s), so we only need to pass
@@ -219,13 +224,13 @@ def build_cnn(input_var=None):
     # A fully-connected layer of 256 units with 50% dropout on its inputs:
     network = lasagne.layers.DenseLayer(
             lasagne.layers.dropout(network, p=.5),
-            num_units=256,
+            num_units=16,
             nonlinearity=lasagne.nonlinearities.rectify)
 
     # And, finally, the 10-unit output layer with 50% dropout on its inputs:
     network = lasagne.layers.DenseLayer(
             lasagne.layers.dropout(network, p=.5),
-            num_units=10,
+            num_units=N_CLASSES,
             nonlinearity=lasagne.nonlinearities.softmax)
 
     return network
@@ -258,7 +263,7 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
 # more functions to better separate the code, but it wouldn't make it any
 # easier to read.
 
-def main(model='mlp', num_epochs=5):
+def main(model='cnn', num_epochs=2):
     # Load the dataset
     print("Loading data...")
     X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
@@ -286,7 +291,7 @@ def main(model='mlp', num_epochs=5):
     # to minimize (for our multi-class problem, it is the cross-entropy loss):
     prediction = lasagne.layers.get_output(network)
     print(prediction)
-    return
+
     loss = lasagne.objectives.categorical_crossentropy(prediction, target_var)
     loss = loss.mean()
     # We could add some weight decay as well here, see lasagne.regularization.
@@ -313,16 +318,10 @@ def main(model='mlp', num_epochs=5):
 
     # Compile a function performing a training step on a mini-batch (by giving
     # the updates dictionary) and returning the corresponding training loss:
-    print(type(input_var))
-    print(input_var)
     train_fn = theano.function([input_var, target_var], loss, updates=updates)
 
     # Compile a second function computing the validation loss and accuracy:
     val_fn = theano.function([input_var, target_var], [test_loss, test_acc])
-
-
-    print(11)
-    return
 
     # Finally, launch the training loop.
     print("Starting training...")
@@ -332,7 +331,7 @@ def main(model='mlp', num_epochs=5):
         train_err = 0
         train_batches = 0
         start_time = time.time()
-        for batch in iterate_minibatches(X_train, y_train, 5, shuffle=True):
+        for batch in iterate_minibatches(X_train, y_train, 50, shuffle=True):
             inputs, targets = batch
             train_err += train_fn(inputs, targets)
             train_batches += 1
@@ -360,7 +359,7 @@ def main(model='mlp', num_epochs=5):
     test_err = 0
     test_acc = 0
     test_batches = 0
-    for batch in iterate_minibatches(X_test, y_test, 50, shuffle=False):
+    for batch in iterate_minibatches(X_test, y_test, 5, shuffle=True):
         inputs, targets = batch
         err, acc = val_fn(inputs, targets)
         test_err += err
