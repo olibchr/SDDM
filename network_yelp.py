@@ -19,17 +19,21 @@ from os.path import isfile, join
 from scipy import misc
 
 
-N_CLASSES = 2
 
-# ################## Download and prepare the MNIST dataset ##################
-# This is just some way of getting the MNIST dataset from an online location
-# and loading it into numpy arrays. It doesn't involve Lasagne at all.
 
+# ################## Params ##################
+
+
+N_CLASSES = 2  # number of output units
 dirname = 'imgs/'
 labelfile = 'image_meta_v5.csv'
 imagesize_y = 400
 imagesize_x = 400
 
+batch_s = 5 # Batch size
+
+
+# ################## Network ##################
 
 def dictionary(labelfile):
 
@@ -331,7 +335,7 @@ def main(model='cnn', num_epochs=2):
         train_err = 0
         train_batches = 0
         start_time = time.time()
-        for batch in iterate_minibatches(X_train, y_train, 50, shuffle=True):
+        for batch in iterate_minibatches(X_train, y_train, batch_s, shuffle=True):
             inputs, targets = batch
             train_err += train_fn(inputs, targets)
             train_batches += 1
@@ -340,7 +344,7 @@ def main(model='cnn', num_epochs=2):
         val_err = 0
         val_acc = 0
         val_batches = 0
-        for batch in iterate_minibatches(X_val, y_val, 5, shuffle=False):
+        for batch in iterate_minibatches(X_val, y_val, batch_s, shuffle=False):
             inputs, targets = batch
             err, acc = val_fn(inputs, targets)
             val_err += err
@@ -359,7 +363,7 @@ def main(model='cnn', num_epochs=2):
     test_err = 0
     test_acc = 0
     test_batches = 0
-    for batch in iterate_minibatches(X_test, y_test, 5, shuffle=True):
+    for batch in iterate_minibatches(X_test, y_test, batch_s, shuffle=True):
         inputs, targets = batch
         err, acc = val_fn(inputs, targets)
         test_err += err
