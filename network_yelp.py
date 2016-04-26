@@ -84,7 +84,7 @@ def load_dataset():
     """
 
     # We reserve the last 100 training examples for validation.
-    size = int(1/3*len(X_train))
+    size = int(len(X_train)/3)
 
     X_test = X_train[:size]
     y_test = y_train[:size]
@@ -94,10 +94,7 @@ def load_dataset():
 
     X_train, X_val = X_train[:-size], X_train[-size:]
     y_train, y_val = y_train[:-size], y_train[-size:]
-    
-    print(len(X_train))
-    print(len(X_val))
-    print(len(X_test))
+
 
     X_test = np.array(X_test, dtype=theano.config.floatX)
     y_test = np.array(y_test, dtype=np.int32)
