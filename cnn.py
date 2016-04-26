@@ -16,8 +16,7 @@ from scipy import misc
 
 # ################## Params ##################
 N_CLASSES = 2  # number of output units
-dirname = 'imgs/'
-labelfile = 'image_meta_v5.csv'
+
 imagesize_y = 400
 imagesize_x = 400
 
