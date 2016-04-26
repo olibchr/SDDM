@@ -63,9 +63,9 @@ def load_dataset():
 
         if file[-3:] == "jpg" or file [-3:] =="png":
 
-            col = Image.open(dirname+file)
-            gray = col.convert('L')
-            gray.save(dirname+file)
+            # col = Image.open(dirname+file)
+            # gray = col.convert('L')
+            # gray.save(dirname+file)
 
             face = misc.imread(dirname+file)
             face = face.reshape(-1, 1, imagesize_x, imagesize_y)
