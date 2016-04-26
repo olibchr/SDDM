@@ -23,8 +23,8 @@ from scipy import misc
 
 # ################## Params ##################
 N_CLASSES = 2  # number of output units
-dirname = 'imgs/'
-labelfile = 'image_meta_v5.csv'
+dirname = 'yelp_subset_png/'
+labelfile = 'meta/image_meta.csv'
 imagesize_y = 400
 imagesize_x = 400
 
@@ -61,7 +61,7 @@ def load_dataset():
 
         imagename = file[:-4]
 
-        if file[-3:] == "jpg" or file [-4:] =="jpeg":
+        if file[-3:] == "jpg" or file [-3:] =="png":
 
             col = Image.open(dirname+file)
             gray = col.convert('L')
