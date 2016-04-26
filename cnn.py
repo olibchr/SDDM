@@ -15,7 +15,7 @@ from os.path import isfile, join
 from scipy import misc
 
 
-def build_cnn(input_var=None):
+def build(input_var=None):
     # As a third model, we'll create a CNN of two convolution + pooling stages
     # and a fully-connected hidden layer in front of the output layer.
 

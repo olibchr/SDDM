@@ -19,7 +19,7 @@ from scipy import misc
 # This script supports three types of models. For each one, we define a
 # function that takes a Theano variable representing the input and returns
 # the output layer of a neural network model built in Lasagne.
-def build_mlp(input_var=None):
+def build(input_var=None):
     # This creates an MLP of two hidden layers of 800 units each, followed by
     # a softmax output layer of 10 units. It applies 20% dropout to the input
     # data and 50% dropout to the hidden layers.
@@ -60,7 +60,7 @@ def build_mlp(input_var=None):
     # the output layer to give access to a network in Lasagne:
     return l_out
 
-def build_custom_mlp(input_var=None, depth=2, width=800, drop_input=.2,
+def build_custom(input_var=None, depth=2, width=800, drop_input=.2,
                      drop_hidden=.5):
     # By default, this creates the same network as `build_mlp`, but it can be
     # customized with respect to the number and size of hidden layers. This

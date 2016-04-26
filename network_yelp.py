@@ -15,7 +15,8 @@ from os import listdir
 from os.path import isfile, join
 from scipy import misc
 
-
+import cnn
+import mlp
 
 
 # ################## Params ##################
@@ -30,7 +31,6 @@ batch_s = 5 # Batch size
 
 # ################## Network ##################
 def dictionary(labelfile):
-
     dic = {}
     with open(labelfile, 'rb') as f:
 
@@ -114,12 +114,6 @@ def load_dataset():
 
     return X_train, y_train, X_val, y_val, X_test, y_test
 
-
-
-
-
-
-
 # ############################# Batch iterator ###############################
 # This is just a simple helper function iterating over training data in
 # mini-batches of a particular size, optionally in random order. It assumes
@@ -140,7 +134,6 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
             excerpt = slice(start_idx, start_idx + batchsize)
         yield inputs[excerpt], targets[excerpt]
 
-
 # ############################## Main program ################################
 # Everything else will be handled in our main program now. We could pull out
 # more functions to better separate the code, but it wouldn't make it any
@@ -157,13 +150,13 @@ def main(model='cnn', num_epochs=2):
     # Create neural network model (depending on first command line parameter)
     print("Building model and compiling functions...")
     if model == 'mlp':
-        network = build_mlp(input_var)
+        network = mlp.build(input_var)
     elif model.startswith('custom_mlp:'):
         depth, width, drop_in, drop_hid = model.split(':', 1)[1].split(',')
-        network = build_custom_mlp(input_var, int(depth), int(width),
+        network = mlp.build_custom(input_var, int(depth), int(width),
                                    float(drop_in), float(drop_hid))
     elif model == 'cnn':
-        network = build_cnn(input_var)
+        network = cnn.build(input_var)
     else:
         print("Unrecognized model type %r." % model)
         return
