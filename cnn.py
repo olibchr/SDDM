@@ -1,3 +1,20 @@
+from __future__ import print_function
+
+import sys
+import time
+import csv
+
+import numpy as np
+import theano
+import theano.tensor as T
+from PIL import Image
+
+import lasagne
+from os import listdir
+from os.path import isfile, join
+from scipy import misc
+
+
 def build_cnn(input_var=None):
     # As a third model, we'll create a CNN of two convolution + pooling stages
     # and a fully-connected hidden layer in front of the output layer.

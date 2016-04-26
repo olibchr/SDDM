@@ -1,3 +1,20 @@
+from __future__ import print_function
+
+import sys
+import time
+import csv
+
+import numpy as np
+import theano
+import theano.tensor as T
+from PIL import Image
+
+import lasagne
+from os import listdir
+from os.path import isfile, join
+from scipy import misc
+
+
 # ##################### Build the neural network model #######################
 # This script supports three types of models. For each one, we define a
 # function that takes a Theano variable representing the input and returns

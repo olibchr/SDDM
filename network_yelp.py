@@ -2,11 +2,8 @@
 from __future__ import print_function
 
 import sys
-import os
 import time
 import csv
-
-from random import shuffle
 
 import numpy as np
 import theano
