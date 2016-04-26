@@ -26,7 +26,7 @@ labelfile = 'meta/image_meta.csv'
 imagesize_y = 400
 imagesize_x = 400
 
-batch_s = 5 # Batch size
+batch_s = 50 # Batch size
 
 
 # ################## Network ##################
@@ -58,13 +58,14 @@ def load_dataset():
 
         imagename = file[:-4]
 
-        if file[-3:] == "jpg" or file [-3:] =="png":
+        if file[-3:] == "png":
 
             # col = Image.open(dirname+file)
             # gray = col.convert('L')
             # gray.save(dirname+file)
-
+	    
             face = misc.imread(dirname+file)
+	    
             face = face.reshape(-1, 1, imagesize_x, imagesize_y)
             X_train.append(face / np.float32(256))
             y_train.append(dic[imagename])
@@ -74,13 +75,9 @@ def load_dataset():
     mergeList = []
     for idx, val in enumerate(X_train):
         mergeList.append((val,y_train[idx]))
-
     shuffle(mergeList)
-
     X_train = []
     y_train = []
-
-
     for i in mergeList:
         X_train.append(i[0])
         y_train.append(i[1])
