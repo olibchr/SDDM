@@ -22,8 +22,6 @@ from scipy import misc
 
 
 # ################## Params ##################
-
-
 N_CLASSES = 2  # number of output units
 dirname = 'imgs/'
 labelfile = 'image_meta_v5.csv'
@@ -34,7 +32,6 @@ batch_s = 5 # Batch size
 
 
 # ################## Network ##################
-
 def dictionary(labelfile):
 
     dic = {}
@@ -51,7 +48,6 @@ def dictionary(labelfile):
     return dic
 
 def load_dataset():
-
     dic = dictionary(labelfile)
 
     images = [f for f in listdir(dirname) if isfile(join(dirname, f))]
@@ -125,7 +121,6 @@ def load_dataset():
 # This script supports three types of models. For each one, we define a
 # function that takes a Theano variable representing the input and returns
 # the output layer of a neural network model built in Lasagne.
-
 def build_mlp(input_var=None):
     # This creates an MLP of two hidden layers of 800 units each, followed by
     # a softmax output layer of 10 units. It applies 20% dropout to the input
@@ -248,7 +243,6 @@ def build_cnn(input_var=None):
 # own custom data iteration function. For small datasets, you can also copy
 # them to GPU at once for slightly improved performance. This would involve
 # several changes in the main program, though, and is not demonstrated here.
-
 def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
     assert len(inputs) == len(targets)
     if shuffle:
@@ -266,7 +260,6 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
 # Everything else will be handled in our main program now. We could pull out
 # more functions to better separate the code, but it wouldn't make it any
 # easier to read.
-
 def main(model='cnn', num_epochs=2):
     # Load the dataset
     print("Loading data...")
@@ -384,7 +377,6 @@ def main(model='cnn', num_epochs=2):
 
 
 if __name__ == '__main__':
-
     if ('--help' in sys.argv) or ('-h' in sys.argv):
         print("Trains a neural network on MNIST using Lasagne.")
         print("Usage: %s [MODEL [EPOCHS]]" % sys.argv[0])
