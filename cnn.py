@@ -14,6 +14,12 @@ from os import listdir
 from os.path import isfile, join
 from scipy import misc
 
+# ################## Params ##################
+N_CLASSES = 2  # number of output units
+dirname = 'imgs/'
+labelfile = 'image_meta_v5.csv'
+imagesize_y = 400
+imagesize_x = 400
 
 def build(input_var=None):
     # As a third model, we'll create a CNN of two convolution + pooling stages
