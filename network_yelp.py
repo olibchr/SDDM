@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-from __future__ import print_function
-
 import sys
 import time
 import csv
@@ -21,7 +18,7 @@ import mlp
 
 # ################## Params ##################
 N_CLASSES = 2  # number of output units
-dirname = 'yelp_subset_png/'
+dirname = 'data/'
 labelfile = 'meta/image_meta.csv'
 imagesize_y = 400
 imagesize_x = 400
@@ -58,7 +55,7 @@ def load_dataset():
 
         imagename = file[:-4]
 
-        if file[-3:] == "png":
+        if file[-3:] == "jpg":
 
             # col = Image.open(dirname+file)
             # gray = col.convert('L')
@@ -83,8 +80,11 @@ def load_dataset():
         y_train.append(i[1])
     """
 
+
     # We reserve the last 100 training examples for validation.
+    
     size = int(len(X_train)/3)
+    print(size)
 
     X_test = X_train[:size]
     y_test = y_train[:size]
@@ -94,7 +94,10 @@ def load_dataset():
 
     X_train, X_val = X_train[:-size], X_train[-size:]
     y_train, y_val = y_train[:-size], y_train[-size:]
-
+    
+    print(len(X_train))
+    print(len(X_val))
+    print(len(X_test))
 
     X_test = np.array(X_test, dtype=theano.config.floatX)
     y_test = np.array(y_test, dtype=np.int32)
@@ -136,7 +139,7 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
 # Everything else will be handled in our main program now. We could pull out
 # more functions to better separate the code, but it wouldn't make it any
 # easier to read.
-def main(model='cnn', num_epochs=2):
+def main(model='cnn', num_epochs=200):
     # Load the dataset
     print("Loading data...")
     X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
