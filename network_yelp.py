@@ -18,7 +18,7 @@ import mlp
 
 # ################## Params ##################
 N_CLASSES = 2  # number of output units
-dirname = 'data/'
+dirname = 'photos_resized/photos_resized/'
 labelfile = 'meta/image_meta.csv'
 imagesize_y = 400
 imagesize_x = 400
@@ -57,9 +57,9 @@ def load_dataset():
 
         if file[-3:] == "jpg":
 
-            # col = Image.open(dirname+file)
-            # gray = col.convert('L')
-            # gray.save(dirname+file)
+            col = Image.open(dirname+file)
+            gray = col.convert('L')
+            gray.save(dirname+file)
 	    
             face = misc.imread(dirname+file)
 	    
