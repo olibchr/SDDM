@@ -64,8 +64,12 @@ def load_dataset():
             face = misc.imread(dirname+file)
 	    
             face = face.reshape(-1, 1, imagesize_x, imagesize_y)
-            X_train.append(face / np.float32(256))
-            y_train.append(dic[imagename])
+            
+            try:
+                X_train.append(face / np.float32(256))
+                y_train.append(dic[imagename])
+            except (RuntimeError, TypeError, NameError):
+                pass
 
 
     """
