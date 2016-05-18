@@ -68,8 +68,8 @@ def load_dataset():
             try:
                 X_train.append(face / np.float32(256))
                 y_train.append(dic[imagename])
-            except (RuntimeError, TypeError, NameError):
-                pass
+            except KeyError:
+                print('No entry for %s found!' % (imagename))
 
 
     """
