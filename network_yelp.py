@@ -65,10 +65,10 @@ def load_dataset():
 	    
             face = face.reshape(-1, 1, imagesize_x, imagesize_y)
             
-            try:
+            if imagename in dic:
                 X_train.append(face / np.float32(256))
                 y_train.append(dic[imagename])
-            except KeyError:
+            else:
                 print('No entry for %s found!' % (imagename))
 
 
