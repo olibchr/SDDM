@@ -7,6 +7,11 @@ import theano
 import theano.tensor as T
 from PIL import Image
 
+import lasagne
+from os import listdir
+from os.path import isfile, join
+from scipy import misc
+
 
 # ################## Params ##################
 N_CLASSES = 2  # number of output units
