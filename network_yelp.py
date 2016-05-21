@@ -56,10 +56,6 @@ def load_dataset():
         imagename = file[:-4]
 
         if file[-3:] == "jpg":
-
-            col = Image.open(dirname+file)
-            gray = col.convert('L')
-            gray.save(dirname+file)
 	    
             face = misc.imread(dirname+file)
 	    
