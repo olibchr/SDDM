@@ -81,7 +81,6 @@ def load_dataset():
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
         except Exception as e:
             print('No image for %s found ' % (img_id))
-            os.remove(img_id +'.jpg')
 
         if img_id in dic:
             X_train.append(face / np.float32(256))
