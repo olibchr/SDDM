@@ -58,6 +58,8 @@ def load_dataset():
             else:
                 print('No entry for %s found!' % (img_name))
 
+    size = int(len(X_train)/3)
+    
     X_test = X_train[:size]
     y_test = y_train[:size]
 
