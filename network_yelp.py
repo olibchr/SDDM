@@ -58,18 +58,17 @@ def load_img2shop(file):
     print "loaded img2shop data"
     return img2shop_dict
 
+def load_img_names():
+    print "loading img names"
+    img_names = []
+    with open(IMG_NAMES_FILE) as img_name_file:
+        img_names = img_name_file.readlines()
+    print "loaded img names"
+    return img_names
+
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
-    print "loading img names"
-    # images = [f for f in listdir(IMG_DIR) if isfile(join(IMG_DIR, f))]
-    images = []
-    with open(IMG_NAMES_FILE) as img_name_file:
-        images = img_name_file.readlines()
-        for idx, image in images:
-            images = images[idx] + '.jpg'
-    print images
-    print "loaded img names"
-    exit(1)
+    images = load_img_names()
 
     X_train = []
     y_train=[]
