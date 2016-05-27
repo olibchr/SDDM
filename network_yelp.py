@@ -45,6 +45,7 @@ def dictionary(labelfile):
 
 # returns a dict which if you query it with a img id it returns the according shop id
 def load_img2shop(file):
+    print "loading img2shop data"
     img2shop_dict = {}
     with open(file) as data_file:
         json_list = json.load(data_file)
@@ -52,6 +53,7 @@ def load_img2shop(file):
             img_id = item['photo_id']
             shop_id = item['business_id']
             img2shop_dict[img_id] = shop_id
+    print "loaded img2shop data"
     return img2shop_dict
 
 def load_dataset():
@@ -83,9 +85,12 @@ def load_dataset():
                 print('No entry for %s found!' % (img_id))
             
             count += 1
+            print "loaded imgs: " + str(len(X_train))
                 
         if len(X_train) > 2000:
             break
+
+    print "loaded imgs: all"
 
     size = int(len(X_train)/3)
 
