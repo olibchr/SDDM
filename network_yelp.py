@@ -76,7 +76,7 @@ def load_dataset():
     count = 0
 
     for img_id in images:
-        file_path = IMG_DIR + file + '.jpg'
+        file_path = IMG_DIR + img_id + '.jpg'
         try:
             face = misc.imread(file_path)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
