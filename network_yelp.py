@@ -68,7 +68,6 @@ def load_img_names():
 
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
-    img2shop = load_img2shop(IMG2SHOP_FILE)
     images = load_img_names()
 
     X_train = []
@@ -84,9 +83,9 @@ def load_dataset():
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
 
-        if img_id in img2shop:
+        if img_id in dic:
             X_train.append(face / np.float32(256))
-            y_train.append(img2shop[img_id])
+            y_train.append(dic[img_id])
         else:
             print('No entry for %s found!' % (img_id))
 
