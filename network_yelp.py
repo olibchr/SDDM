@@ -82,8 +82,7 @@ def load_dataset():
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
 
-        img_id.replace(" ", "")
-        img_id.replace("\n", "")
+        img_id = img_id[:22]
         if img_id in dic:
             X_train.append(face / np.float32(256))
             y_train.append(dic[img_id])
