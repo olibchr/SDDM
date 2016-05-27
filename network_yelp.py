@@ -77,25 +77,22 @@ def load_dataset():
 
     img2shop = load_img2shop(IMG2SHOP_FILE)
 
-    for file in images:
-        img_id = file[:-4]
+    for img_id in images:
+        try:
+            face = misc.imread(IMG_DIR + file + '.jpg')
+            face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
+        except Exception as e:
+            print('No image for %s found for business %s' % (img_id, img2shop[img_id]))
+            os.remove(img_id +'.jpg')
 
-        if file[-3:] == "jpg":
-            try: 
-                face = misc.imread(IMG_DIR + file)
-                face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
-            except Exception as e:
-                print('No image for %s found for business %s' % (img_id, img2shop[img_id]))
-                os.remove(img_id +'.jpg')
-                
-            if img_id in dic:
-                X_train.append(face / np.float32(256))
-                y_train.append(dic[img_id])
-            else:
-                print('No entry for %s found!' % (img_id))
-            
-            count += 1
-            print "loaded imgs: " + str(len(X_train))
+        if img_id in dic:
+            X_train.append(face / np.float32(256))
+            y_train.append(dic[img_id])
+        else:
+            print('No entry for %s found!' % (img_id))
+
+        count += 1
+        print "loaded imgs: " + str(len(X_train))
                 
         if len(X_train) > 2000:
             break
