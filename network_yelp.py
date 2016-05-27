@@ -31,9 +31,9 @@ batch_s = 50 # Batch size
 
 # ################## Network ##################
 def dictionary(labelfile):
+    print "loading meta data"
     dic = {}
     with open(labelfile, 'rb') as f:
-
         reader = csv.reader(f)
         for row in reader:
             if len(row) > 7:
@@ -41,6 +41,7 @@ def dictionary(labelfile):
                     dic[row[0]] = 1
                 else:
                     dic[row[0]] = 0
+    print "loaded meta data"
     return dic
 
 # returns a dict which if you query it with a img id it returns the according shop id
