@@ -62,15 +62,12 @@ def load_img_names():
     img_names = []
     with open(IMG_NAMES_FILE) as img_name_file:
         img_names = img_name_file.readlines()
-    print "loaded img names"
     return img_names
 
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
     images = load_img_names()
     
-    for keys in dic:
-        print(keys)
 
     X_train = []
     y_train=[]
@@ -85,6 +82,8 @@ def load_dataset():
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
 
+        img_id.replace(" ", "")
+        img_id.replace("\n", "")
         if img_id in dic:
             X_train.append(face / np.float32(256))
             y_train.append(dic[img_id])
