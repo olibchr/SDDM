@@ -75,14 +75,12 @@ def load_dataset():
     
     count = 0
 
-    img2shop = load_img2shop(IMG2SHOP_FILE)
-
     for img_id in images:
         try:
             face = misc.imread(IMG_DIR + file + '.jpg')
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
         except Exception as e:
-            print('No image for %s found for business %s' % (img_id, img2shop[img_id]))
+            print('No image for %s found ' % (img_id))
             os.remove(img_id +'.jpg')
 
         if img_id in dic:
