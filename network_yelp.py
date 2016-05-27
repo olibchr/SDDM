@@ -58,8 +58,6 @@ def load_img2shop(file):
     print "loaded img2shop data"
     return img2shop_dict
 
-def load_img_names()
-
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
     print "loading img names"
