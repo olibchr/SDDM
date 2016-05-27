@@ -56,9 +56,7 @@ def load_img2shop(file):
 
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
-
     images = [f for f in listdir(IMG_DIR) if isfile(join(IMG_DIR, f))]
-
 
     X_train = []
     y_train=[]
@@ -66,16 +64,12 @@ def load_dataset():
     count = 0
 
     for file in images:
-
         imagename = file[:-4]
 
         if file[-3:] == "jpg":
-	    
             try: 
                 face = misc.imread(IMG_DIR + file)
-
                 face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
-            
             except Exception as e:
                 print('No image for %s found!' % (imagename))
                 os.remove(imagename +'.jpg')
@@ -92,8 +86,6 @@ def load_dataset():
             break
 
     size = int(len(X_train)/3)
-
-    # We reserve the last 100 training examples for validation.
 
     X_test = X_train[:size]
     y_test = y_train[:size]
