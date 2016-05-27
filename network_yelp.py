@@ -19,30 +19,26 @@ import mlp
 # ################## Params ##################
 N_CLASSES = 2  # number of output units
 dirname = 'photos_resized/photos_resized/'
-labelfile = 'meta/image_meta.csv'
+meta_data_file = 'meta/image_meta.csv'
 imagesize_y = 400
 imagesize_x = 400
-
 batch_s = 50 # Batch size
 
-
-# ################## Network ##################
-def dictionary(labelfile):
+def load_meta_data(file_path):
     dic = {}
-    with open(labelfile, 'rb') as f:
-
+    with open(file_path, 'rb') as f:
         reader = csv.reader(f)
         for row in reader:
             if len(row) > 7:
+                # set targets of images
                 if row[7] == '1':
                     dic[row[0]] = 1
                 else:
                     dic[row[0]] = 0
-
     return dic
 
 def load_dataset():
-    dic = dictionary(labelfile)
+    meta_data = load_meta_data(meta_data_file)
 
     images = [f for f in listdir(dirname) if isfile(join(dirname, f))]
 
@@ -61,9 +57,9 @@ def load_dataset():
 	    
             face = face.reshape(-1, 1, imagesize_x, imagesize_y)
             
-            if imagename in dic:
+            if imagename in meta_data:
                 X_train.append(face / np.float32(256))
-                y_train.append(dic[imagename])
+                y_train.append(meta_data[imagename])
             else:
                 print('No entry for %s found!' % (imagename))
 
