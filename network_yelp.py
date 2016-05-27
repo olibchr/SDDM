@@ -42,7 +42,7 @@ def dictionary(META_DATA_FILE):
                     dic[row[0]] = 1
                 else:
                     dic[row[0]] = 0
-    print (dictionary[1:100])
+    print (dictionary)
     return dic
 
 # returns a dict which if you query it with a img id it returns the according shop id
