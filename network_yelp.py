@@ -90,7 +90,7 @@ def load_dataset():
             print('No entry for %s found!' % (img_id))
 
         count += 1
-        print "loaded imgs: " + str(len(X_train))
+        # print "loaded imgs: " + str(len(X_train))
 
         if len(X_train) > 2000:
             break
@@ -108,9 +108,7 @@ def load_dataset():
     X_train, X_val = X_train[:-size], X_train[-size:]
     y_train, y_val = y_train[:-size], y_train[-size:]
     
-    print(len(X_train))
-    print(len(X_val))
-    print(len(X_test))
+    print(X_test.shape)
 
     X_test = np.array(X_test, dtype=theano.config.floatX)
     y_test = np.array(y_test, dtype=np.int32)
