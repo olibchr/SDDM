@@ -63,22 +63,24 @@ def load_dataset():
     
     count = 0
 
+    img2shop = load_img2shop(IMG2SHOP_FILE)
+
     for file in images:
-        imagename = file[:-4]
+        img_id = file[:-4]
 
         if file[-3:] == "jpg":
             try: 
                 face = misc.imread(IMG_DIR + file)
                 face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
             except Exception as e:
-                print('No image for %s found!' % (imagename))
-                os.remove(imagename +'.jpg')
+                print('No image for %s found for business %s' % (img_id, img2shop[img_id]))
+                os.remove(img_id +'.jpg')
                 
-            if imagename in dic:
+            if img_id in dic:
                 X_train.append(face / np.float32(256))
-                y_train.append(dic[imagename])
+                y_train.append(dic[img_id])
             else:
-                print('No entry for %s found!' % (imagename))
+                print('No entry for %s found!' % (img_id))
             
             count += 1
                 
