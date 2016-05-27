@@ -76,11 +76,11 @@ def load_dataset():
 
     for img_id in images:
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove break line
-        #try:
-        face = misc.imread(file_path)
-        face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
-        #except Exception as e:
-         #   print('No image for %s found in %s' % (img_id, file_path))
+        try:
+            face = misc.imread(file_path)
+            face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
+        except Exception as e:
+            print('No image for %s found in %s' % (img_id, file_path))
 
         img_id = img_id[:22]
         if img_id in dic:
@@ -108,9 +108,10 @@ def load_dataset():
     X_train, X_val = X_train[:-size], X_train[-size:]
     y_train, y_val = y_train[:-size], y_train[-size:]
     
-
+    
     for items in X_train:
-        print(len(items))
+        for item in items:
+            print(len(item))
     
     X_test = np.array(X_test, dtype=theano.config.floatX)
     y_test = np.array(y_test, dtype=np.int32)
