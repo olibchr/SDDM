@@ -56,19 +56,15 @@ def load_dataset():
         imagename = file[:-4]
 
         if file[-3:] == "jpg":
-
-            col = Image.open(dirname+file)
-            gray = col.convert('L')
-            gray.save(dirname+file)
 	    
             face = misc.imread(dirname+file)
 	    
             face = face.reshape(-1, 1, imagesize_x, imagesize_y)
             
-            try:
+            if imagename in dic:
                 X_train.append(face / np.float32(256))
                 y_train.append(dic[imagename])
-            except KeyError:
+            else:
                 print('No entry for %s found!' % (imagename))
 
 
