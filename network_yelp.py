@@ -69,9 +69,8 @@ def load_dataset():
     dic = dictionary(META_DATA_FILE)
     images = load_img_names()
     
-    for keys,values in dic:
+    for keys in dic:
         print(keys)
-        print(values)
 
     X_train = []
     y_train=[]
