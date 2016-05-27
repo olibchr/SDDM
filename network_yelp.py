@@ -56,15 +56,21 @@ def load_dataset():
 
         if file[-3:] == "jpg":
 	    
-            face = misc.imread(dirname+file)
-	    
-            face = face.reshape(-1, 1, imagesize_x, imagesize_y)
+            try: 
+                face = misc.imread(dirname+file)
+
+                face = face.reshape(-1, 1, imagesize_x, imagesize_y)
             
+            except Exception as e:
+                print('No image for %s found!' % (imagename))
+                os.remove(imagename +'.jpg')
+                
             if imagename in dic:
                 X_train.append(face / np.float32(256))
                 y_train.append(dic[imagename])
             else:
                 print('No entry for %s found!' % (imagename))
+                
         if len(X_train) > 2000:
             break
 
