@@ -65,8 +65,8 @@ def load_dataset():
     images = []
     with open(IMG_NAMES_FILE) as img_name_file:
         images = img_name_file.readlines()
-        for image in images:
-            image = image + ".jpg"
+        for idx, image in images:
+            images = images[idx] + '.jpg'
     print images
     print "loaded img names"
     exit(1)
