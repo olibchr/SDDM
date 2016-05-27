@@ -76,8 +76,8 @@ def load_dataset():
     count = 0
 
     for img_id in images:
+        file_path = IMG_DIR + file + '.jpg'
         try:
-            file_path = IMG_DIR + file + '.jpg'
             face = misc.imread(file_path)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
         except Exception as e:
@@ -91,7 +91,7 @@ def load_dataset():
 
         count += 1
         print "loaded imgs: " + str(len(X_train))
-                
+
         if len(X_train) > 2000:
             break
 
