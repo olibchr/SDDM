@@ -23,8 +23,8 @@ N_CLASSES = 2  # number of output units
 IMG_DIR = 'photos_resized/photos_resized/'
 META_DATA_FILE = 'meta/image_meta.csv'
 IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
-imagesize_y = 400
-imagesize_x = 400
+IMG_Y_SIZE = 400
+IMG_X_SIZE = 400
 
 batch_s = 50 # Batch size
 
@@ -74,7 +74,7 @@ def load_dataset():
             try: 
                 face = misc.imread(IMG_DIR + file)
 
-                face = face.reshape(-1, 1, imagesize_x, imagesize_y)
+                face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
             
             except Exception as e:
                 print('No image for %s found!' % (imagename))
