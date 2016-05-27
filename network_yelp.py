@@ -46,7 +46,6 @@ def load_dataset():
 
     images = [f for f in listdir(dirname) if isfile(join(dirname, f))]
 
-    # negatives = [f for f in listdir('Negatives/') if isfile(join('Negatives/', f))]
 
     X_train = []
     y_train=[]
@@ -68,23 +67,7 @@ def load_dataset():
                 print('No entry for %s found!' % (imagename))
 
 
-    """
-    mergeList = []
-    for idx, val in enumerate(X_train):
-        mergeList.append((val,y_train[idx]))
-    shuffle(mergeList)
-    X_train = []
-    y_train = []
-    for i in mergeList:
-        X_train.append(i[0])
-        y_train.append(i[1])
-    """
-
-
     # We reserve the last 100 training examples for validation.
-    
-    size = int(len(X_train)/3)
-    print(size)
 
     X_test = X_train[:size]
     y_test = y_train[:size]
