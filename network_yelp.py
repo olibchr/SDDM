@@ -108,7 +108,6 @@ def load_dataset():
     X_train, X_val = X_train[:-size], X_train[-size:]
     y_train, y_val = y_train[:-size], y_train[-size:]
     
-    print(X_test.shape)
 
     X_test = np.array(X_test, dtype=theano.config.floatX)
     y_test = np.array(y_test, dtype=np.int32)
