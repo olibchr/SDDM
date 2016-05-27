@@ -59,7 +59,9 @@ def load_img2shop(file):
 
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
+    print "loading img names"
     images = [f for f in listdir(IMG_DIR) if isfile(join(IMG_DIR, f))]
+    print "loaded img names"
 
     X_train = []
     y_train=[]
