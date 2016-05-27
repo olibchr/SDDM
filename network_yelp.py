@@ -49,6 +49,8 @@ def load_dataset():
 
     X_train = []
     y_train=[]
+    
+    count = 0
 
     for file in images:
 
@@ -70,6 +72,8 @@ def load_dataset():
                 y_train.append(dic[imagename])
             else:
                 print('No entry for %s found!' % (imagename))
+            
+            count += 1
                 
         if len(X_train) > 2000:
             break
