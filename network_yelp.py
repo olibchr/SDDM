@@ -20,8 +20,9 @@ import mlp
 
 # ################## Params ##################
 N_CLASSES = 2  # number of output units
-dirname = 'photos_resized/photos_resized/'
-labelfile = 'meta/image_meta.csv'
+IMG_DIR = 'photos_resized/photos_resized/'
+META_DATA_FILE = 'meta/image_meta.csv'
+IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 imagesize_y = 400
 imagesize_x = 400
 
@@ -54,9 +55,9 @@ def load_img2shop(file):
     return img2shop_dict
 
 def load_dataset():
-    dic = dictionary(labelfile)
+    dic = dictionary(META_DATA_FILE)
 
-    images = [f for f in listdir(dirname) if isfile(join(dirname, f))]
+    images = [f for f in listdir(IMG_DIR) if isfile(join(IMG_DIR, f))]
 
 
     X_train = []
@@ -71,7 +72,7 @@ def load_dataset():
         if file[-3:] == "jpg":
 	    
             try: 
-                face = misc.imread(dirname+file)
+                face = misc.imread(IMG_DIR + file)
 
                 face = face.reshape(-1, 1, imagesize_x, imagesize_y)
             
