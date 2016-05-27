@@ -20,13 +20,15 @@ import mlp
 
 # ################## Params ##################
 N_CLASSES = 2  # number of output units
+
 IMG_DIR = 'photos_resized/photos_resized/'
 META_DATA_FILE = 'meta/image_meta.csv'
 IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_Y_SIZE = 400
 IMG_X_SIZE = 400
 
-batch_s = 50 # Batch size
+
+batch_s = 128 # Batch size
 
 
 # ################## Network ##################
@@ -68,28 +70,33 @@ def load_dataset():
     
     count = 0
 
-    img2shop = load_img2shop(IMG2SHOP_FILE)
+#   img2shop = load_img2shop(IMG2SHOP_FILE)
 
     for file in images:
         img_id = file[:-4]
 
         if file[-3:] == "jpg":
             try: 
+
                 face = misc.imread(IMG_DIR + file)
                 face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
             except Exception as e:
                 print('No image for %s found for business %s' % (img_id, img2shop[img_id]))
                 os.remove(img_id +'.jpg')
                 
+
             if img_id in dic:
+
                 X_train.append(face / np.float32(256))
                 y_train.append(dic[img_id])
             else:
+
                 print('No entry for %s found!' % (img_id))
-            
+
             count += 1
-            print "loaded imgs: " + str(len(X_train))
-                
+            
+            print(count)
+
         if len(X_train) > 2000:
             break
 

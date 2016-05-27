@@ -33,7 +33,7 @@ def build(input_var=None):
     # Convolutional layer with 32 kernels of size 5x5. Strided and padded
     # convolutions are supported as well; see the docstring.
     network = lasagne.layers.Conv2DLayer(
-            network, num_filters=32, filter_size=(40, 40),
+            network, num_filters=48, filter_size=(11, 11),
             nonlinearity=lasagne.nonlinearities.rectify,
             W=lasagne.init.GlorotUniform())
     # Expert note: Lasagne provides alternative convolutional layers that
@@ -45,9 +45,14 @@ def build(input_var=None):
 
     # Another convolution with 32 5x5 kernels, and another 2x2 pooling:
     network = lasagne.layers.Conv2DLayer(
-            network, num_filters=64, filter_size=(16, 16),
+            network, num_filters=128, filter_size=(5, 5),
             nonlinearity=lasagne.nonlinearities.rectify)
+    
     network = lasagne.layers.MaxPool2DLayer(network, pool_size=(2, 2))
+    
+    network = lasagne.layers.Conv2DLayer(
+            network, num_filters=192, filter_size=(5, 5),
+            nonlinearity=lasagne.nonlinearities.rectify)
 
     # A fully-connected layer of 256 units with 50% dropout on its inputs:
     network = lasagne.layers.DenseLayer(
