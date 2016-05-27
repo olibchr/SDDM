@@ -20,8 +20,8 @@ import mlp
 N_CLASSES = 2  # number of output units
 dirname = 'photos_resized/photos_resized/'
 meta_data_file = 'meta/image_meta.csv'
-imagesize_y = 400
-imagesize_x = 400
+img_y_size = 400
+img_x_size = 400
 batch_s = 50 # Batch size
 
 def load_meta_data(file_path):
@@ -40,30 +40,23 @@ def load_meta_data(file_path):
 def load_dataset():
     meta_data = load_meta_data(meta_data_file)
 
-    images = [f for f in listdir(dirname) if isfile(join(dirname, f))]
-
+    img_fnames = [f for f in listdir(dirname) if isfile(join(dirname, f))]
 
     X_train = []
     y_train=[]
 
-    for file in images:
+    for img_fname in img_fnames:
+        img_name = img_fname[:-4]
 
-        imagename = file[:-4]
-
-        if file[-3:] == "jpg":
-	    
-            face = misc.imread(dirname+file)
-	    
-            face = face.reshape(-1, 1, imagesize_x, imagesize_y)
+        if img_fname[-3:] == "jpg":
+            face = misc.imread(dirname + img_fname)
+            face = face.reshape(-1, 1, img_x_size, img_y_size)
             
-            if imagename in meta_data:
+            if img_name in meta_data:
                 X_train.append(face / np.float32(256))
-                y_train.append(meta_data[imagename])
+                y_train.append(meta_data[img_name])
             else:
-                print('No entry for %s found!' % (imagename))
-
-
-    # We reserve the last 100 training examples for validation.
+                print('No entry for %s found!' % (img_name))
 
     X_test = X_train[:size]
     y_test = y_train[:size]
