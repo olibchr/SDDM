@@ -65,6 +65,8 @@ def load_dataset():
                 y_train.append(dic[imagename])
             else:
                 print('No entry for %s found!' % (imagename))
+        if len(X_train) > 2000:
+            break
 
 
     # We reserve the last 100 training examples for validation.
