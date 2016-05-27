@@ -12,6 +12,8 @@ from os import listdir
 from os.path import isfile, join
 from scipy import misc
 
+import json
+
 import cnn
 import mlp
 
@@ -38,8 +40,18 @@ def dictionary(labelfile):
                     dic[row[0]] = 1
                 else:
                     dic[row[0]] = 0
-
     return dic
+
+# returns a dict which if you query it with a img id it returns the according shop id
+def load_img2shop(file):
+    img2shop_dict = {}
+    with open(file) as data_file:
+        json_list = json.load(data_file)
+        for item in json_list:
+            img_id = item['photo_id']
+            shop_id = item['business_id']
+            img2shop_dict[img_id] = shop_id
+    return img2shop_dict
 
 def load_dataset():
     dic = dictionary(labelfile)
