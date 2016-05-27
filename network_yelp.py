@@ -68,6 +68,7 @@ def load_dataset():
         if len(X_train) > 2000:
             break
 
+    size = int(len(X_train)/3)
 
     # We reserve the last 100 training examples for validation.
 
