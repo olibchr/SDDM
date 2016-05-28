@@ -211,6 +211,9 @@ def main(model='cnn', num_epochs=2):
     # Finally, launch the training loop.
     print("Starting training...")
     # We iterate over epochs:
+    val_err_prev = -1
+    degrading_patience = 10
+    degrading_count = 0
     for epoch in range(num_epochs):
         # In each epoch, we do a full pass over the training data:
         train_err = 0
@@ -239,6 +242,17 @@ def main(model='cnn', num_epochs=2):
         print("  validation loss:\t\t{:.6f}".format(val_err / val_batches))
         print("  validation accuracy:\t\t{:.2f} %".format(
             val_acc / val_batches * 100))
+
+        # early stopping
+        if val_err_prev is not -1 and val_err_prev < val_err:
+            if degrading_patience <= degrading_count:
+                degrading_count += 1
+            else:
+                print("Early stopping")
+                break
+        else:
+            val_err_prev = val_err
+            degrading_count = 0
 
     # After training, we compute and print the test error:
     test_err = 0
