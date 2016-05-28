@@ -80,7 +80,8 @@ def load_dataset():
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
                 y_imgs.append((int(dic[img_id])*2))
-                print(len(X_imgs[-1]))
+                print(len(X_imgs))
+                print(len(y_imgs))
                 print("Image %s with %s stars" %(img_id, y_imgs[-1]))
             else:
                 print('No entry for %s found!' % (img_id))
