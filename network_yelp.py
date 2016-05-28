@@ -25,7 +25,7 @@ IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 400
 IMG_X_SIZE = 400
-BATCH_SIZE = 40 # Batch size
+BATCH_SIZE = 30 # Batch size
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
