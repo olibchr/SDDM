@@ -69,17 +69,13 @@ def load_dataset():
     for img_id in images:
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
-            col = Image.open(file_path)
-            gray = col.convert('L')
-            gray.save(file_path)
-
             face = misc.imread(file_path)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
             
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
-                y_imgs.append((int(dic[img_id])*2))
+                y_imgs.append((int(dic[img_id])))
                 print(len(X_imgs))
                 print(len(y_imgs))
                 print("Image %s with %s stars" %(img_id, y_imgs[-1]))
