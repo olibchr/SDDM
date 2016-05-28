@@ -15,7 +15,7 @@ from os.path import isfile, join
 from scipy import misc
 
 # ################## Params ##################
-N_CLASSES = 2  # number of output units
+N_CLASSES = 9  # number of output units
 
 imagesize_y = 400
 imagesize_x = 400
