@@ -77,13 +77,13 @@ def load_dataset():
             
             face = misc.imread(file_path)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
-            print(len(face))
+            
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
                 y_imgs.append(dic[img_id])
             else:
-                print('No entry for %s found!' % (img_id))
+                pass
                 
         except Exception as e:
             #print('No image for %s found in %s' % (img_id, file_path))
