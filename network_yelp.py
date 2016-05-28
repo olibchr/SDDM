@@ -29,7 +29,7 @@ BATCH_SIZE = 50 # Batch size
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
-    print "loading meta data"
+    print "Loading meta data"
     dic = {}
     with open(META_DATA_FILE, 'rb') as f:
         reader = csv.reader(f)
@@ -43,7 +43,7 @@ def dictionary(META_DATA_FILE):
 
 # returns a dict which if you query it with a img id it returns the according shop id
 def load_img2shop(file):
-    print "loading img2shop data"
+    print "Loading img2shop data"
     img2shop_dict = {}
     with open(file) as data_file:
         json_list = json.load(data_file)
@@ -51,11 +51,10 @@ def load_img2shop(file):
             img_id = item['photo_id']
             shop_id = item['business_id']
             img2shop_dict[img_id] = shop_id
-    print "loaded img2shop data"
     return img2shop_dict
 
 def load_img_names():
-    print "loading img names"
+    print "Loading img names"
     img_names = []
     with open(IMG_NAMES_FILE) as img_name_file:
         img_names = img_name_file.readlines()
