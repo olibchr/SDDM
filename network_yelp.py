@@ -64,8 +64,8 @@ def load_dataset():
     dic = dictionary(META_DATA_FILE)
     images = load_img_names()
 
-    X_train = []
-    y_train=[]
+    X_imgs = []
+    y_imgs = []
     
     count = 0
 
@@ -81,8 +81,8 @@ def load_dataset():
             
             img_id = img_id[:22]
             if img_id in dic:
-                X_train.append(face / np.float32(256))
-                y_train.append(dic[img_id])
+                X_imgs.append(face / np.float32(256))
+                y_imgs .append(dic[img_id])
             else:
                 print('No entry for %s found!' % (img_id))
                 
@@ -94,26 +94,38 @@ def load_dataset():
         count += 1
         # print "loaded imgs: " + str(len(X_train))
 
-        if len(X_train) > 2000:
+        if len(X_imgs) > 2000:
             break
 
-    print "loaded imgs: all " + str(len(X_train)) + " images"
+    print "loaded imgs: all " + str(len(X_imgs)) + " images"
 
-    # size train, test & validation sets are equal
-    size = int(len(X_train)/3)
+    # test_size == valid_size == train_size / 2
+    n_imgs = len(X_imgs)
+    train_size = n_imgs / 2
+    test_size = n_imgs / 4
+    valid_size = n_imgs - train_size - test_size # use all left over imgs
 
-    X_test = X_train[:size]
-    y_test = y_train[:size]
-    print "created test set of size: " + str(len(X_test))
+    # create sets from the back of the imgs list, since this is more efficient in python
+    X_train = X_imgs[-train_size:]
+    y_train = y_imgs[-train_size:]
+    X_imgs.pop(train_size)
+    y_imgs.pop(train_size)
 
-    X_train = X_train[:-size]
-    y_train = y_train[:-size]
-    print "adjusted train set of size: " + str(len(X_train))
+    X_test = X_imgs[-test_size:]
+    y_test = y_imgs[-test_size:]
+    X_imgs.pop(test_size)
+    y_imgs.pop(test_size)
 
-    X_train, X_val = X_train[:-size], X_train[-size:]
-    y_train, y_val = y_train[:-size], y_train[-size:]
-    print "adjusted train set of size: " + str(len(X_train))
-    print "created valid set of size: " + str(len(X_val))
+    X_valid = X_imgs[-valid_size:]
+    y_valid = y_imgs[-valid_size:]
+    X_imgs.pop(valid_size)
+    y_imgs.pop(valid_size)
+
+    assert len(X_imgs) == 0 && len(y_imgs) == 0 # checks if all imgs are properly used
+    print "sizes"
+    print train_size
+    print test_size
+    print valid_size
     exit(1)
 
 
@@ -123,18 +135,18 @@ def load_dataset():
     X_test = np.array(X_test, dtype=theano.config.floatX)
     y_test = np.array(y_test, dtype=np.int32)
 
-    X_train = np.array(X_train, dtype=theano.config.floatX)
-    y_train = np.array(y_train, dtype=np.int32)
+    X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
+    y_imgs  = np.array(y_imgs , dtype=np.int32)
 
     X_val = np.array(X_val, dtype=theano.config.floatX)
     y_val = np.array(y_val, dtype=np.int32)
 
-    X_train = np.squeeze(X_train, axis=(1,))  # np.delete(X_train, X_train[:], 1
+    X_imgs = np.squeeze(X_imgs, axis=(1,))  # np.delete(X_train, X_train[:], 1
     X_test = np.squeeze(X_test, axis=(1,))
     X_val = np.squeeze(X_val, axis=(1,))
 
 
-    return X_train, y_train, X_val, y_val, X_test, y_test
+    return X_imgs, y_imgs , X_val, y_val, X_test, y_test
 
 # ############################# Batch iterator ###############################
 # This is just a simple helper function iterating over training data in
