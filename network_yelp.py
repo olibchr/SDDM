@@ -93,7 +93,7 @@ def load_dataset():
         count += 1
         # print "loaded imgs: " + str(len(X_train))
 
-        if len(X_imgs) >= 10:
+        if len(X_imgs) >= 2000:
             break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
