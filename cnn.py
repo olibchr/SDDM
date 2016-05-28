@@ -51,7 +51,7 @@ def build(input_var=None):
     network = lasagne.layers.MaxPool2DLayer(network, pool_size=(2, 2))
     
     network = lasagne.layers.Conv2DLayer(
-            network, num_filters=192, filter_size=(5, 5),
+            network, num_filters=192, filter_size=(3, 3),
             nonlinearity=lasagne.nonlinearities.rectify)
 
     # A fully-connected layer of 256 units with 50% dropout on its inputs:
