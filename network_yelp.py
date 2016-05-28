@@ -89,8 +89,6 @@ def load_dataset():
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
 
-        
-
         count += 1
         # print "loaded imgs: " + str(len(X_train))
 
@@ -106,41 +104,27 @@ def load_dataset():
     valid_size = n_imgs - train_size - test_size # use all left over imgs
 
     # create sets from the back of the imgs list, since this is more efficient in python
-    X_train = X_imgs[-train_size:]
-    y_train = y_imgs[-train_size:]
+    X_train = np.array(X_imgs[-train_size:], dtype=theano.config.floatX)
+    X_train = np.squeeze(X_train, axis=(1,))
+    y_train = np.array(y_imgs[-train_size:], dtype=np.int32)
     del X_imgs[-train_size:]
     del y_imgs[-train_size:]
 
-    X_test = X_imgs[-test_size:]
-    y_test = y_imgs[-test_size:]
+    X_test = np.array(X_imgs[-test_size:], dtype=theano.config.floatX)
+    X_test = np.squeeze(X_test, axis=(1,))
+    y_test = np.array(y_imgs[-test_size:], dtype=np.int32)
     del X_imgs[-test_size:]
     del y_imgs[-test_size:]
 
-    X_valid = X_imgs[-valid_size:]
-    y_valid = y_imgs[-valid_size:]
+    X_valid = np.array(X_imgs[-valid_size:], dtype=theano.config.floatX)
+    X_valid = np.squeeze(X_valid, axis=(1,))
+    y_valid = np.array(y_imgs[-valid_size:], dtype=np.int32)
     del X_imgs[-valid_size:]
     del y_imgs[-valid_size:]
 
     assert len(X_imgs) == 0 and len(y_imgs) == 0 # checks if all imgs are properly used
 
-    # for items in X_train:
-    #     print(len(items))
-    
-    X_test = np.array(X_test, dtype=theano.config.floatX)
-    y_test = np.array(y_test, dtype=np.int32)
-
-    X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
-    y_imgs  = np.array(y_imgs , dtype=np.int32)
-
-    X_val = np.array(X_val, dtype=theano.config.floatX)
-    y_val = np.array(y_val, dtype=np.int32)
-
-    X_imgs = np.squeeze(X_imgs, axis=(1,))  # np.delete(X_train, X_train[:], 1
-    X_test = np.squeeze(X_test, axis=(1,))
-    X_val = np.squeeze(X_val, axis=(1,))
-
-
-    return X_imgs, y_imgs , X_val, y_val, X_test, y_test
+    return X_train, y_train, X_valid, y_valid, X_test, y_test
 
 # ############################# Batch iterator ###############################
 # This is just a simple helper function iterating over training data in
