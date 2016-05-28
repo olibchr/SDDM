@@ -77,6 +77,10 @@ def load_dataset():
     for img_id in images:
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove break line
         try:
+            col = Image.open(file_path)
+            gray = col.convert('L')
+            gray.save(dirname+file)
+
             face = misc.imread(file_path)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
         except Exception as e:
@@ -110,8 +114,7 @@ def load_dataset():
     
     
     for items in X_train:
-        for item in items:
-            print(len(item))
+        print(len(items))
     
     X_test = np.array(X_test, dtype=theano.config.floatX)
     y_test = np.array(y_test, dtype=np.int32)
