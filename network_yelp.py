@@ -79,7 +79,7 @@ def load_dataset():
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
-                y_imgs.append((dic[img_id]*2))
+                y_imgs.append((int(dic[img_id])*2))
             else:
                 print('No entry for %s found!' % (img_id))
                 
