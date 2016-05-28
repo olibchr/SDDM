@@ -121,11 +121,17 @@ def load_dataset():
     X_imgs.pop(valid_size)
     y_imgs.pop(valid_size)
 
-    assert len(X_imgs) == 0 and len(y_imgs) == 0 # checks if all imgs are properly used
-    print "sizes"
+    # assert len(X_imgs) == 0 and len(y_imgs) == 0 # checks if all imgs are properly used
+    print "projected sizes"
+    print n_imgs
     print train_size
     print test_size
     print valid_size
+    print "real sizes"
+    print len(X_imgs)
+    print len(X_train)
+    print len(X_test)
+    print len(X_valid)
     exit(1)
 
 
