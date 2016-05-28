@@ -85,14 +85,14 @@ def load_dataset():
                 
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
-
+        
         count += 1
         # print "loaded imgs: " + str(len(X_train))
 
         if len(X_imgs) >= 300:
             break
 
-    print "loaded imgs: all " + str(len(X_imgs)) + " images"
+    print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
     # test_size == valid_size == train_size / 2
     n_imgs = len(X_imgs)
