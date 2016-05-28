@@ -121,19 +121,7 @@ def load_dataset():
     del X_imgs[-valid_size:]
     del y_imgs[-valid_size:]
 
-    # assert len(X_imgs) == 0 and len(y_imgs) == 0 # checks if all imgs are properly used
-    print "projected sizes"
-    print n_imgs
-    print train_size
-    print test_size
-    print valid_size
-    print "real sizes"
-    print len(X_imgs)
-    print len(X_train)
-    print len(X_test)
-    print len(X_valid)
-    exit(1)
-
+    assert len(X_imgs) == 0 and len(y_imgs) == 0 # checks if all imgs are properly used
 
     # for items in X_train:
     #     print(len(items))
