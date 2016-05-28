@@ -1,31 +1,13 @@
 from __future__ import print_function
 
-import sys
-import time
-import csv
-
-import numpy as np
-import theano
-import theano.tensor as T
-from PIL import Image
-
 import lasagne
-from os import listdir
-from os.path import isfile, join
-from scipy import misc
 
-# ################## Params ##################
-N_CLASSES = 2  # number of output units
-
-imagesize_y = 400
-imagesize_x = 400
-
-def build(input_var=None):
+def build(image_x_size, image_y_size, n_classes, input_var=None):
     # As a third model, we'll create a CNN of two convolution + pooling stages
     # and a fully-connected hidden layer in front of the output layer.
 
     # Input layer, as usual:
-    network = lasagne.layers.InputLayer(shape=(None, 1, imagesize_x, imagesize_y),
+    network = lasagne.layers.InputLayer(shape=(None, 1, image_x_size, image_y_size),
                                         input_var=input_var)
     # This time we do not apply input dropout, as it tends to work less well
     # for convolutional layers.
@@ -63,7 +45,7 @@ def build(input_var=None):
     # And, finally, the 10-unit output layer with 50% dropout on its inputs:
     network = lasagne.layers.DenseLayer(
             lasagne.layers.dropout(network, p=.5),
-            num_units=N_CLASSES,
+            num_units=n_classes,
             nonlinearity=lasagne.nonlinearities.softmax)
 
     return network

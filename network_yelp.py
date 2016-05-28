@@ -168,7 +168,7 @@ def main(model='cnn', num_epochs=200):
         network = mlp.build_custom(input_var, int(depth), int(width),
                                    float(drop_in), float(drop_hid))
     elif model == 'cnn':
-        network = cnn.build(input_var)
+        network = cnn.build(IMG_X_SIZE, IMG_Y_SIZE, N_CLASSES, input_var)
     else:
         print("Unrecognized model type %r." % model)
         return
