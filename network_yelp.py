@@ -26,7 +26,6 @@ IMG_Y_SIZE = 400
 IMG_X_SIZE = 400
 BATCH_SIZE = 50 # Batch size
 
-
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
     print "loading meta data"
@@ -64,7 +63,6 @@ def load_img_names():
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
     images = load_img_names()
-    
 
     X_train = []
     y_train=[]
@@ -72,7 +70,7 @@ def load_dataset():
     count = 0
 
     for img_id in images:
-        file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove break line
+        file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
             col = Image.open(file_path)
             gray = col.convert('L')
@@ -99,22 +97,28 @@ def load_dataset():
         if len(X_train) > 2000:
             break
 
-    print "loaded imgs: all"
+    print "loaded imgs: all " + str(len(X_train)) + " images"
 
+    # size train, test & validation sets are equal
     size = int(len(X_train)/3)
 
     X_test = X_train[:size]
     y_test = y_train[:size]
+    print "created test set of size: " + str(len(X_test))
 
     X_train = X_train[:-size]
     y_train = y_train[:-size]
+    print "adjusted train set of size: " + str(len(X_train))
 
     X_train, X_val = X_train[:-size], X_train[-size:]
     y_train, y_val = y_train[:-size], y_train[-size:]
-    
-    
-    for items in X_train:
-        print(len(items))
+    print "adjusted train set of size: " + str(len(X_train))
+    print "created valid set of size: " + str(len(X_val))
+    exit(1)
+
+
+    # for items in X_train:
+    #     print(len(items))
     
     X_test = np.array(X_test, dtype=theano.config.floatX)
     y_test = np.array(y_test, dtype=np.int32)
