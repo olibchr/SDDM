@@ -75,9 +75,9 @@ def load_dataset():
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
-                y_imgs.append((int(dic[img_id])))
-                print(len(X_imgs))
-                print(len(y_imgs))
+                y_imgs.append((int(dic[img_id])*2))
+                print((X_imgs))
+                print((y_imgs))
                 print("Image %s with %s stars" %(img_id, y_imgs[-1]))
             else:
                 print('No entry for %s found!' % (img_id))
@@ -89,7 +89,7 @@ def load_dataset():
         count += 1
         # print "loaded imgs: " + str(len(X_train))
 
-        if len(X_imgs) >= 300:
+        if len(X_imgs) >= 10:
             break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
