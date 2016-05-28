@@ -80,11 +80,13 @@ def load_dataset():
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
                 y_imgs.append((int(dic[img_id])*2))
+                print("Image %s with %s stars" %(X_imgs[-1], y_imgs[-1]))
             else:
                 print('No entry for %s found!' % (img_id))
                 
         except Exception as e:
-            print('No image for %s found in %s' % (img_id, file_path))
+            #print('No image for %s found in %s' % (img_id, file_path))
+            pass
         
         count += 1
         # print "loaded imgs: " + str(len(X_train))
