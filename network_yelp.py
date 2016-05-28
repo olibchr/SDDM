@@ -71,13 +71,11 @@ def load_dataset():
         try:
             face = misc.imread(file_path)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
-            
+            print(len(face))
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
                 y_imgs.append((int(dic[img_id])*2))
-                print((X_imgs))
-                print((y_imgs))
                 print("Image %s with %s stars" %(img_id, y_imgs[-1]))
             else:
                 print('No entry for %s found!' % (img_id))
