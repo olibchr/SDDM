@@ -1,24 +1,22 @@
+# general  imports
 import sys
 import time
 import csv
-
+import json
 import numpy as np
-import theano
-import theano.tensor as T
-from PIL import Image
-
-import lasagne
-from os import listdir
-from os.path import isfile, join
 from scipy import misc
 
-import json
+# neural network imports
+import theano
+import theano.tensor as T
+import lasagne
+from PIL import Image
 
+# our imports
 import cnn
 import mlp
 
-
-# ################## Params ##################
+# ################## CONSTANTS ##################
 N_CLASSES = 2  # number of output units
 IMG_DIR = 'photos_resized/photos_resized/'
 META_DATA_FILE = 'meta/image_meta.csv'
@@ -26,8 +24,7 @@ IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 400
 IMG_X_SIZE = 400
-
-batch_s = 50 # Batch size
+BATCH_SIZE = 50 # Batch size
 
 
 # ################## Network ##################
@@ -227,7 +224,7 @@ def main(model='cnn', num_epochs=200):
         train_err = 0
         train_batches = 0
         start_time = time.time()
-        for batch in iterate_minibatches(X_train, y_train, batch_s, shuffle=True):
+        for batch in iterate_minibatches(X_train, y_train, BATCH_SIZE, shuffle=True):
             inputs, targets = batch
             train_err += train_fn(inputs, targets)
             train_batches += 1
@@ -236,7 +233,7 @@ def main(model='cnn', num_epochs=200):
         val_err = 0
         val_acc = 0
         val_batches = 0
-        for batch in iterate_minibatches(X_val, y_val, batch_s, shuffle=False):
+        for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=False):
             inputs, targets = batch
             err, acc = val_fn(inputs, targets)
             val_err += err
@@ -255,7 +252,7 @@ def main(model='cnn', num_epochs=200):
     test_err = 0
     test_acc = 0
     test_batches = 0
-    for batch in iterate_minibatches(X_test, y_test, batch_s, shuffle=True):
+    for batch in iterate_minibatches(X_test, y_test, BATCH_SIZE, shuffle=True):
         inputs, targets = batch
         err, acc = val_fn(inputs, targets)
         test_err += err
