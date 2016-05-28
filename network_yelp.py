@@ -90,7 +90,6 @@ def load_dataset():
             pass
         
         count += 1
-        print "loaded imgs: " + str(len(X_train))
 
         if len(X_imgs) >= 2000:
             break
