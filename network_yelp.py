@@ -79,7 +79,7 @@ def load_dataset():
         try:
             col = Image.open(file_path)
             gray = col.convert('L')
-            gray.save(dirname+file)
+            gray.save(file_path)
 
             face = misc.imread(file_path)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
