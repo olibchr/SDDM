@@ -25,7 +25,7 @@ IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 400
 IMG_X_SIZE = 400
-BATCH_SIZE = 10 # Batch size
+BATCH_SIZE = 40 # Batch size
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -86,11 +86,11 @@ def load_dataset():
                 pass
                 
         except Exception as e:
-            #print('No image for %s found in %s' % (img_id, file_path))
+            print('No image for %s found in %s' % (img_id, file_path))
             pass
         
         count += 1
-        # print "loaded imgs: " + str(len(X_train))
+        print "loaded imgs: " + str(len(X_train))
 
         if len(X_imgs) >= 2000:
             break
