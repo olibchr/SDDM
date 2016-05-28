@@ -160,7 +160,7 @@ def main(model='cnn', num_epochs=200):
     target_var = T.ivector('targets')
 
     # Create neural network model (depending on first command line parameter)
-    print("Building model and compiling functions...")
+    print("Building model " + model + " and compiling functions...")
     if model == 'mlp':
         network = mlp.build(input_var)
     elif model.startswith('custom_mlp:'):
