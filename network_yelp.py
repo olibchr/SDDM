@@ -108,18 +108,18 @@ def load_dataset():
     # create sets from the back of the imgs list, since this is more efficient in python
     X_train = X_imgs[-train_size:]
     y_train = y_imgs[-train_size:]
-    X_imgs.pop(train_size)
-    y_imgs.pop(train_size)
+    del X_imgs[-train_size:]
+    del y_imgs[-train_size:]
 
     X_test = X_imgs[-test_size:]
     y_test = y_imgs[-test_size:]
-    X_imgs.pop(test_size)
-    y_imgs.pop(test_size)
+    del X_imgs[-test_size:]
+    del y_imgs[-test_size:]
 
     X_valid = X_imgs[-valid_size:]
     y_valid = y_imgs[-valid_size:]
-    X_imgs.pop(valid_size)
-    y_imgs.pop(valid_size)
+    del X_imgs[-valid_size:]
+    del y_imgs[-valid_size:]
 
     # assert len(X_imgs) == 0 and len(y_imgs) == 0 # checks if all imgs are properly used
     print "projected sizes"
