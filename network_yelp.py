@@ -1,41 +1,37 @@
+# general  imports
 import sys
 import time
 import csv
-
+import json
 import numpy as np
-import theano
-import theano.tensor as T
-from PIL import Image
-
-import lasagne
-from os import listdir
-from os.path import isfile, join
 from scipy import misc
 
-import json
+# neural network imports
+import theano
+import theano.tensor as T
+import lasagne
+from PIL import Image
 
+# our imports
 import cnn
 import mlp
 
-
-# ################## Params ##################
+# ################## CONSTANTS ##################
 N_CLASSES = 2  # number of output units
 
 IMG_DIR = 'photos_resized/photos_resized/'
 META_DATA_FILE = 'meta/image_meta.csv'
 IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
+IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 400
 IMG_X_SIZE = 400
-
-
-batch_s = 128 # Batch size
-
+BATCH_SIZE = 50 # Batch size
 
 # ################## Network ##################
-def dictionary(labelfile):
+def dictionary(META_DATA_FILE):
     print "loading meta data"
     dic = {}
-    with open(labelfile, 'rb') as f:
+    with open(META_DATA_FILE, 'rb') as f:
         reader = csv.reader(f)
         for row in reader:
             if len(row) > 7:
@@ -43,7 +39,6 @@ def dictionary(labelfile):
                     dic[row[0]] = 1
                 else:
                     dic[row[0]] = 0
-    print "loaded meta data"
     return dic
 
 # returns a dict which if you query it with a img id it returns the according shop id
@@ -59,79 +54,78 @@ def load_img2shop(file):
     print "loaded img2shop data"
     return img2shop_dict
 
+def load_img_names():
+    print "loading img names"
+    img_names = []
+    with open(IMG_NAMES_FILE) as img_name_file:
+        img_names = img_name_file.readlines()
+    return img_names
+
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
-    print "loading img names"
-    images = [f for f in listdir(IMG_DIR) if isfile(join(IMG_DIR, f))]
-    print "loaded img names"
+    images = load_img_names()
 
-    X_train = []
-    y_train=[]
+    X_imgs = []
+    y_imgs = []
     
     count = 0
 
-#   img2shop = load_img2shop(IMG2SHOP_FILE)
+    for img_id in images:
+        file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
+        try:
+            col = Image.open(file_path)
+            gray = col.convert('L')
+            gray.save(file_path)
 
-    for file in images:
-        img_id = file[:-4]
-
-        if file[-3:] == "jpg":
-            try: 
-
-                face = misc.imread(IMG_DIR + file)
-                face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
-            except Exception as e:
-                print('No image for %s found for business %s' % (img_id, img2shop[img_id]))
-                os.remove(img_id +'.jpg')
-                
-
-            if img_id in dic:
-
-                X_train.append(face / np.float32(256))
-                y_train.append(dic[img_id])
-            else:
-
-                print('No entry for %s found!' % (img_id))
-
-            count += 1
+            face = misc.imread(file_path)
+            face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
             
-            print(count)
+            img_id = img_id[:22]
+            if img_id in dic:
+                X_imgs.append(face / np.float32(256))
+                y_imgs .append(dic[img_id])
+            else:
+                print('No entry for %s found!' % (img_id))
+                
+        except Exception as e:
+            print('No image for %s found in %s' % (img_id, file_path))
 
-        if len(X_train) > 2000:
+        count += 1
+        # print "loaded imgs: " + str(len(X_train))
+
+        if len(X_imgs) >= 2000:
             break
 
-    print "loaded imgs: all"
+    print "loaded imgs: all " + str(len(X_imgs)) + " images"
 
-    size = int(len(X_train)/3)
+    # test_size == valid_size == train_size / 2
+    n_imgs = len(X_imgs)
+    train_size = n_imgs / 2
+    test_size = n_imgs / 4
+    valid_size = n_imgs - train_size - test_size # use all left over imgs
 
-    X_test = X_train[:size]
-    y_test = y_train[:size]
+    # create sets from the back of the imgs list, since this is more efficient in python
+    X_train = np.array(X_imgs[-train_size:], dtype=theano.config.floatX)
+    X_train = np.squeeze(X_train, axis=(1,))
+    y_train = np.array(y_imgs[-train_size:], dtype=np.int32)
+    del X_imgs[-train_size:]
+    del y_imgs[-train_size:]
 
-    X_train = X_train[:-size]
-    y_train = y_train[:-size]
-
-    X_train, X_val = X_train[:-size], X_train[-size:]
-    y_train, y_val = y_train[:-size], y_train[-size:]
-    
-    print(len(X_train))
-    print(len(X_val))
-    print(len(X_test))
-
-    X_test = np.array(X_test, dtype=theano.config.floatX)
-    y_test = np.array(y_test, dtype=np.int32)
-
-    X_train = np.array(X_train, dtype=theano.config.floatX)
-    y_train = np.array(y_train, dtype=np.int32)
-
-    X_val = np.array(X_val, dtype=theano.config.floatX)
-    y_val = np.array(y_val, dtype=np.int32)
-
-    X_train = np.squeeze(X_train, axis=(1,))  # np.delete(X_train, X_train[:], 1
+    X_test = np.array(X_imgs[-test_size:], dtype=theano.config.floatX)
     X_test = np.squeeze(X_test, axis=(1,))
-    X_val = np.squeeze(X_val, axis=(1,))
+    y_test = np.array(y_imgs[-test_size:], dtype=np.int32)
+    del X_imgs[-test_size:]
+    del y_imgs[-test_size:]
 
+    X_valid = np.array(X_imgs[-valid_size:], dtype=theano.config.floatX)
+    X_valid = np.squeeze(X_valid, axis=(1,))
+    y_valid = np.array(y_imgs[-valid_size:], dtype=np.int32)
+    del X_imgs[-valid_size:]
+    del y_imgs[-valid_size:]
 
-    return X_train, y_train, X_val, y_val, X_test, y_test
+    assert len(X_imgs) == 0 and len(y_imgs) == 0 # checks if all imgs are properly used
+
+    return X_train, y_train, X_valid, y_valid, X_test, y_test
 
 # ############################# Batch iterator ###############################
 # This is just a simple helper function iterating over training data in
@@ -190,8 +184,6 @@ def main(model='cnn', num_epochs=200):
     loss = loss.mean()
     # We could add some weight decay as well here, see lasagne.regularization.
 
-
-
     # Create update expressions for training, i.e., how to modify the
     # parameters at each training step. Here, we'll use Stochastic Gradient
     # Descent (SGD) with Nesterov momentum, but Lasagne offers plenty more.
@@ -225,7 +217,7 @@ def main(model='cnn', num_epochs=200):
         train_err = 0
         train_batches = 0
         start_time = time.time()
-        for batch in iterate_minibatches(X_train, y_train, batch_s, shuffle=True):
+        for batch in iterate_minibatches(X_train, y_train, BATCH_SIZE, shuffle=True):
             inputs, targets = batch
             train_err += train_fn(inputs, targets)
             train_batches += 1
@@ -234,7 +226,7 @@ def main(model='cnn', num_epochs=200):
         val_err = 0
         val_acc = 0
         val_batches = 0
-        for batch in iterate_minibatches(X_val, y_val, batch_s, shuffle=False):
+        for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=False):
             inputs, targets = batch
             err, acc = val_fn(inputs, targets)
             val_err += err
@@ -253,7 +245,7 @@ def main(model='cnn', num_epochs=200):
     test_err = 0
     test_acc = 0
     test_batches = 0
-    for batch in iterate_minibatches(X_test, y_test, batch_s, shuffle=True):
+    for batch in iterate_minibatches(X_test, y_test, BATCH_SIZE, shuffle=True):
         inputs, targets = batch
         err, acc = val_fn(inputs, targets)
         test_err += err
