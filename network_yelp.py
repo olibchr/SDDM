@@ -92,7 +92,7 @@ def load_dataset():
         count += 1
         # print "loaded imgs: " + str(len(X_train))
 
-        if len(X_imgs) >= 300:
+        if len(X_imgs) >= 30:
             break
 
     print "loaded imgs: all " + str(len(X_imgs)) + " images"
@@ -252,7 +252,7 @@ def main(model='cnn', num_epochs=2):
                 break
         else:
             val_err_prev = val_err
-            degrading_count = 0
+            degrading_count = 0 
 
     # After training, we compute and print the test error:
     test_err = 0
