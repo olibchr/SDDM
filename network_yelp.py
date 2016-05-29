@@ -23,8 +23,8 @@ IMG_DIR = 'photos_resized/photos_resized/'
 META_DATA_FILE = 'meta/image_meta.csv'
 IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
-IMG_Y_SIZE = 400
-IMG_X_SIZE = 400
+IMG_Y_SIZE = 224
+IMG_X_SIZE = 224
 BATCH_SIZE = 30 # Batch size
 
 # ################## Network ##################

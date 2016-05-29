@@ -17,8 +17,8 @@ from scipy import misc
 # ################## Params ##################
 N_CLASSES = 9  # number of output units
 
-imagesize_y = 400
-imagesize_x = 400
+imagesize_y = 224
+imagesize_x = 224
 
 def build(input_var=None):
     # As a third model, we'll create a CNN of two convolution + pooling stages
