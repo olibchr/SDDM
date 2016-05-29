@@ -19,7 +19,7 @@ import mlp
 # ################## CONSTANTS ##################
 N_CLASSES = 9  # number of output units
 
-IMG_DIR = '../../SDDM/photos_resized/photos_resized/'
+IMG_DIR = 'photos_resized/photos_resized/'
 META_DATA_FILE = 'meta/image_meta.csv'
 IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
