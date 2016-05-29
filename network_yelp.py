@@ -87,12 +87,10 @@ def load_dataset():
                 
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
-            pass
-        
-        count += 1
+            #pass
 
-        if len(X_imgs) >= 2000:
-            break
+        #if len(X_imgs) >= 2000:
+            #break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
