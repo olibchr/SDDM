@@ -85,8 +85,8 @@ def load_dataset():
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= 20000:
-            break
+        #if len(X_imgs) >= 20000:
+            #break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
@@ -143,7 +143,7 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
 # Everything else will be handled in our main program now. We could pull out
 # more functions to better separate the code, but it wouldn't make it any
 # easier to read.
-def main(model='cnn', num_epochs=200):
+def main(model='cnn', num_epochs=100):
     # Load the dataset
     print("Loading data...")
     X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
