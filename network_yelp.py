@@ -79,8 +79,8 @@ def images_to_mem(image_ids):
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        #if len(X_imgs) >= 16000:
-           # break
+        if len(X_imgs) >= 100:
+           break
         
     X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
     X_imgs = np.squeeze(X_imgs, axis=(1,))
@@ -89,7 +89,7 @@ def images_to_mem(image_ids):
     return X_imgs, y_imgs
 
 def load_dataset():
-    
+
     image_ids = load_img_names()
     n_imgs = len(image_ids)
     
