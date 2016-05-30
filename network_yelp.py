@@ -170,9 +170,12 @@ def main(model='cnn', num_epochs=2):
         network = mlp.build_custom(input_var, int(depth), int(width),
                                    float(drop_in), float(drop_hid))
     elif model == 'cnn':
-        # network = cnn.build(IMG_X_SIZE, IMG_Y_SIZE, N_CLASSES, input_var)
         print("Load network from file")
-        network = load_cnn('model.npz')
+        network = cnn.build(IMG_X_SIZE, IMG_Y_SIZE, N_CLASSES, input_var)
+        # network = load_cnn('model.npz')
+        with np.load('model.npz') as f:
+            param_values = [f['arr_%d' % i] for i in range(len(f.files))]
+        lasagne.layers.set_all_param_values(network, param_values)
     else:
         print("Unrecognized model type %r." % model)
         return
