@@ -52,14 +52,14 @@ def load_img2shop(file):
     return img2shop_dict
 
 def load_img_names():
-    print "Loading img names"
     img_names = []
     with open(IMG_NAMES_FILE) as img_name_file:
         img_names = img_name_file.readlines()
     return img_names
 
 def images_to_mem(image_ids):
-    
+
+    print "Putting images into memory for %s images" % (len(image_ids))
     X_imgs = []
     y_imgs = []
     dic = dictionary(META_DATA_FILE)
@@ -102,7 +102,6 @@ def load_dataset():
     test_size = int(n_imgs * 0.15)
     val_size = n_imgs - train_size - test_size # use all left over imgs
 
-    print(train_size)
     train_ids=image_ids[:train_size]
     test_ids=image_ids[train_size:test_size]
     val_ids=image_ids[train_size+test_size:]
@@ -114,7 +113,8 @@ def load_dataset():
     
     del train_ids
     del val_ids
-
+    print(X_train)
+    print(y_train)
     assert len(X_train) == 0 and len(y_train) == 0 # checks if all imgs are properly used
 
     return X_train, y_train, X_valid, y_valid, X_test, y_test
