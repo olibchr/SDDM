@@ -26,12 +26,11 @@ IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 5 # Batch size
-MAX_IMGS = 30 # Defined how many images we want to maximally load (for testing)
+MAX_IMGS = 140000 # Defined how many images we want to maximally load (for testing)
 image_ids = []
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
-    print "Loading meta data"
     dic = {}
     with open(META_DATA_FILE, 'rb') as f:
         reader = csv.reader(f)
@@ -60,7 +59,7 @@ def load_img_names():
 
 def images_to_mem(image_idx):
 
-    print "Putting images into memory for %s images" % (len(image_idx))
+    #print "Putting images into memory for %s images" % (len(image_idx))
     X_imgs = []
     y_imgs = []
     dic = dictionary(META_DATA_FILE)
@@ -77,11 +76,11 @@ def images_to_mem(image_idx):
                 y_imgs.append(dic[img_id])
                 
         except Exception as e:
-            print('No image for %s found in %s' % (img_id, file_path))
+            #print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= MAX_IMGS:
-           break
+        #if len(X_imgs) >= MAX_IMGS:
+           #break
         
     X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
     X_imgs = np.squeeze(X_imgs, axis=(1,))
@@ -218,7 +217,7 @@ def main(model='cnn', num_epochs=100):
 
         # Shuffle the ids
 
-        for batch in range(0, int(MAX_IMGS/BATCH_SIZE)):
+        for batch in range(0, int(len(image_ids)/BATCH_SIZE)):
             inputs, targets = X_train, y_train
             train_err += train_fn(inputs, targets)
             train_batches += 1
