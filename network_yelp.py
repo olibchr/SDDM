@@ -211,13 +211,17 @@ def main(model='cnn', num_epochs=100):
         train_err = 0
         train_batches = 0
         start_time = time.time()
-        for batch in range(1,int(len(image_ids)/BATCH_SIZE)):
+
+        print("batches %s" %(image_ids/BATCH_SIZE))
+        print(image_ids)
+
+        for batch in range(1, int(len(image_ids)/BATCH_SIZE)):
             inputs, targets = X_train, y_train
             train_err += train_fn(inputs, targets)
             train_batches += 1
             X_train, y_train = images_to_mem(train_ids)
             train_ids = train_ids[BATCH_SIZE:]
-
+            print("%s images left" % len(train_ids))
         # And a full pass over the validation data:
         val_err = 0
         val_acc = 0
