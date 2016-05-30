@@ -210,7 +210,7 @@ def main(model='cnn', num_epochs=2):
     # Compile a second function computing the validation loss and accuracy:
     val_fn = theano.function([input_var, target_var], [test_loss, test_acc])
 
-    if (True):
+    if (Falserue):
         print("Starting training...")
         # We iterate over epochs:
         for epoch in range(num_epochs):
@@ -242,6 +242,7 @@ def main(model='cnn', num_epochs=2):
             print("  validation accuracy:\t\t{:.2f} %".format(
                 val_acc / val_batches * 100))
     else:
+        print("Loading network...")
         with np.load('model.npz') as f:
             param_values = [f['arr_%d' % i] for i in range(len(f.files))]
         lasagne.layers.set_all_param_values(network, param_values)
