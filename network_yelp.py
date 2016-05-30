@@ -25,7 +25,7 @@ IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
-BATCH_SIZE = 192 # Batch size
+BATCH_SIZE = 5 # Batch size
 image_ids = []
 
 # ################## Network ##################
@@ -79,7 +79,7 @@ def images_to_mem(image_ids):
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= 100:
+        if len(X_imgs) >= 20:
            break
         
     X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
