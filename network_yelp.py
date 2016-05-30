@@ -99,7 +99,8 @@ def load_dataset():
     train_size = int(n_imgs / 0.7)
     test_size = int(n_imgs / 0.15)
     val_size = n_imgs - train_size - test_size # use all left over imgs
-    
+
+    print(train_size)
     train_ids=image_ids[:train_size]
     test_ids=image_ids[train_size:test_size]
     val_ids=image_ids[train_size+test_size:]
