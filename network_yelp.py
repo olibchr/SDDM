@@ -77,7 +77,7 @@ def images_to_mem(image_idx):
                 
         except Exception as e:
             #print('No image for %s found in %s' % (img_id, file_path))
-            #pass
+            pass
 
         #if len(X_imgs) >= MAX_IMGS:
            #break
@@ -86,7 +86,7 @@ def images_to_mem(image_idx):
     X_imgs = np.squeeze(X_imgs, axis=(1,))
     y_imgs = np.array(y_imgs, dtype=np.int32)
 
-    print("loaded %s images" % len(X_imgs))
+    #print("loaded %s images" % len(X_imgs))
     return X_imgs, y_imgs
 
 def load_dataset():
