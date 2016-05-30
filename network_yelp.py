@@ -97,7 +97,7 @@ def load_dataset():
     image_ids = load_img_names()
     n_imgs = len(image_ids)
     
-    print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
+    #print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
     # test_size == valid_size == train_size / 2
     train_size = int(n_imgs * 0.7)
