@@ -156,6 +156,7 @@ def main(model='cnn', num_epochs=2):
     print("Loading data...")
     X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
 
+
     # Prepare Theano variables for inputs and targets
     input_var = T.tensor4('inputs')
     target_var = T.ivector('targets')
@@ -209,37 +210,37 @@ def main(model='cnn', num_epochs=2):
     # Compile a second function computing the validation loss and accuracy:
     val_fn = theano.function([input_var, target_var], [test_loss, test_acc])
 
-    # Finally, launch the training loop.
-    print("Starting training...")
-    # We iterate over epochs:
-    for epoch in range(num_epochs):
-        # In each epoch, we do a full pass over the training data:
-        train_err = 0
-        train_batches = 0
-        start_time = time.time()
-        for batch in iterate_minibatches(X_train, y_train, BATCH_SIZE, shuffle=True):
-            inputs, targets = batch
-            train_err += train_fn(inputs, targets)
-            train_batches += 1
-
-        # And a full pass over the validation data:
-        val_err = 0
-        val_acc = 0
-        val_batches = 0
-        for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=False):
-            inputs, targets = batch
-            err, acc = val_fn(inputs, targets)
-            val_err += err
-            val_acc += acc
-            val_batches += 1
-
-        # Then we print the results for this epoch:
-        print("Epoch {} of {} took {:.3f}s".format(
-            epoch + 1, num_epochs, time.time() - start_time))
-        print("  training loss:\t\t{:.6f}".format(train_err / train_batches))
-        print("  validation loss:\t\t{:.6f}".format(val_err / val_batches))
-        print("  validation accuracy:\t\t{:.2f} %".format(
-            val_acc / val_batches * 100))
+    # # Finally, launch the training loop.
+    # print("Starting training...")
+    # # We iterate over epochs:
+    # for epoch in range(num_epochs):
+    #     # In each epoch, we do a full pass over the training data:
+    #     train_err = 0
+    #     train_batches = 0
+    #     start_time = time.time()
+    #     for batch in iterate_minibatches(X_train, y_train, BATCH_SIZE, shuffle=True):
+    #         inputs, targets = batch
+    #         train_err += train_fn(inputs, targets)
+    #         train_batches += 1
+    #
+    #     # And a full pass over the validation data:
+    #     val_err = 0
+    #     val_acc = 0
+    #     val_batches = 0
+    #     for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=False):
+    #         inputs, targets = batch
+    #         err, acc = val_fn(inputs, targets)
+    #         val_err += err
+    #         val_acc += acc
+    #         val_batches += 1
+    #
+    #     # Then we print the results for this epoch:
+    #     print("Epoch {} of {} took {:.3f}s".format(
+    #         epoch + 1, num_epochs, time.time() - start_time))
+    #     print("  training loss:\t\t{:.6f}".format(train_err / train_batches))
+    #     print("  validation loss:\t\t{:.6f}".format(val_err / val_batches))
+    #     print("  validation accuracy:\t\t{:.2f} %".format(
+    #         val_acc / val_batches * 100))
 
     # After training, we compute and print the test error:
     test_err = 0
@@ -257,7 +258,7 @@ def main(model='cnn', num_epochs=2):
         test_acc / test_batches * 100))
 
     # Optionally, you could now dump the network weights to a file like this:
-    np.savez('model.npz', *lasagne.layers.get_all_param_values(network))
+    # np.savez('model.npz', *lasagne.layers.get_all_param_values(network))
     #
     # And load them again later on like this:
     # with np.load('model.npz') as f:
