@@ -86,8 +86,7 @@ def images_to_mem(image_ids):
     #X_imgs = np.squeeze(X_imgs, axis=(1,))
     y_imgs = np.array(y_imgs, dtype=np.int32)
 
-    print(len(X_imgs))
-    print(len(y_imgs))
+    print("loaded %s images" % len(X_imgs))
     return X_imgs, y_imgs
 
 def load_dataset():
@@ -103,20 +102,17 @@ def load_dataset():
     val_size = n_imgs - train_size - test_size # use all left over imgs
 
     train_ids=image_ids[:train_size]
-    test_ids=image_ids[train_size:test_size]
+    test_ids=image_ids[train_size:train_size + test_size]
     val_ids=image_ids[train_size+test_size:]
     image_ids = image_ids[:train_size]
 
-    print(len(test_ids))
     X_valid, y_valid = images_to_mem(val_ids)
     X_test, y_test = images_to_mem(test_ids)
     X_train, y_train = images_to_mem(train_ids[:BATCH_SIZE])
     
     del train_ids
     del val_ids
-    print(len(X_train))
-    print(len(y_train))
-    assert len(X_train) == 0 and len(y_train) == 0 # checks if all imgs are properly used
+    assert len(X_train) == len(y_train) # checks if all imgs are properly used
 
     return X_train, y_train, X_valid, y_valid, X_test, y_test
 
