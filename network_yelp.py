@@ -106,15 +106,16 @@ def load_dataset():
     test_ids=image_ids[train_size:test_size]
     val_ids=image_ids[train_size+test_size:]
     image_ids = image_ids[:train_size]
-    
+
+    print(len(test_ids))
     X_valid, y_valid = images_to_mem(val_ids)
     X_test, y_test = images_to_mem(test_ids)
     X_train, y_train = images_to_mem(train_ids[:BATCH_SIZE])
     
     del train_ids
     del val_ids
-    print(X_train)
-    print(y_train)
+    print(len(X_train))
+    print(len(y_train))
     assert len(X_train) == 0 and len(y_train) == 0 # checks if all imgs are properly used
 
     return X_train, y_train, X_valid, y_valid, X_test, y_test
