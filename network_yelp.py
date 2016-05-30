@@ -252,6 +252,7 @@ def main(model='cnn', num_epochs=2):
         test_err += err
         test_acc += acc
         test_batches += 1
+        print "BATCH:" + str(test_batches)
     print("Final results:")
     print("  test loss:\t\t\t{:.6f}".format(test_err / test_batches))
     print("  test accuracy:\t\t{:.2f} %".format(
