@@ -212,8 +212,8 @@ def main(model='cnn', num_epochs=100):
         train_batches = 0
         start_time = time.time()
 
-        print("batches %s" %(image_ids/BATCH_SIZE))
-        print(image_ids)
+        print("batches %s" %(len(image_ids)/BATCH_SIZE))
+        print(len(image_ids))
 
         for batch in range(1, int(len(image_ids)/BATCH_SIZE)):
             inputs, targets = X_train, y_train
