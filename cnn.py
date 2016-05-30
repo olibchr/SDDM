@@ -35,7 +35,7 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
     # IMG_NET: dense 2048
     network = lasagne.layers.DenseLayer(
             lasagne.layers.dropout(network, p=.5),
-            num_units=256,
+            num_units=512,
             nonlinearity=lasagne.nonlinearities.rectify)
 
     # IMG_NET: dense 2048
