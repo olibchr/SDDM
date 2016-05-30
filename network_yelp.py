@@ -210,7 +210,7 @@ def main(model='cnn', num_epochs=2):
     # Compile a second function computing the validation loss and accuracy:
     val_fn = theano.function([input_var, target_var], [test_loss, test_acc])
 
-    if (Falserue):
+    if (False):
         print("Starting training...")
         # We iterate over epochs:
         for epoch in range(num_epochs):
