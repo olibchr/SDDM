@@ -211,7 +211,7 @@ def main(model='cnn', num_epochs=100):
         train_err = 0
         train_batches = 0
         start_time = time.time()
-        for batch in range(1,int(image_ids/BATCH_SIZE)):
+        for batch in range(1,int(len(image_ids)/BATCH_SIZE)):
             inputs, targets = X_train, y_train
             train_err += train_fn(inputs, targets)
             train_batches += 1
