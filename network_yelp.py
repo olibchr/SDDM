@@ -15,6 +15,7 @@ from PIL import Image
 # our imports
 import cnn
 import mlp
+import sys
 
 # ################## CONSTANTS ##################
 N_CLASSES = 9  # number of output units
@@ -28,6 +29,8 @@ IMG_X_SIZE = 224
 BATCH_SIZE = 5 # Batch size
 MAX_IMGS = 140000 # Defined how many images we want to maximally load (for testing)
 image_ids = []
+
+sys.stdout = open('python_print.txt', 'w')
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -59,7 +62,7 @@ def load_img_names():
 
 def images_to_mem(image_idx):
 
-    #print "Putting images into memory for %s images" % (len(image_idx))
+    print "Putting images into memory for %s images" % (len(image_idx))
     X_imgs = []
     y_imgs = []
     dic = dictionary(META_DATA_FILE)
@@ -76,7 +79,7 @@ def images_to_mem(image_idx):
                 y_imgs.append(dic[img_id])
                 
         except Exception as e:
-            #print('No image for %s found in %s' % (img_id, file_path))
+            print('No image for %s found in %s' % (img_id, file_path))
             pass
 
         if len(X_imgs) >= MAX_IMGS:
@@ -86,7 +89,7 @@ def images_to_mem(image_idx):
     X_imgs = np.squeeze(X_imgs, axis=(1,))
     y_imgs = np.array(y_imgs, dtype=np.int32)
 
-    #print("loaded %s images" % len(X_imgs))
+    print("loaded %s images" % len(X_imgs))
     return X_imgs, y_imgs
 
 def load_dataset():
@@ -94,7 +97,7 @@ def load_dataset():
     image_ids = load_img_names()
     n_imgs = len(image_ids)
     
-    #print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
+    print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
     # test_size == valid_size == train_size / 2
     train_size = int(n_imgs * 0.7)
@@ -145,7 +148,7 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
 # easier to read.
 def main(model='cnn', num_epochs=100):
     # Load the dataset
-    print("Loading data...") 
+    print("Loading data...")
     X_train, y_train, X_val, y_val, X_test, y_test, image_ids = load_dataset()
 
     # Prepare Theano variables for inputs and targets
@@ -223,7 +226,7 @@ def main(model='cnn', num_epochs=100):
             train_batches += 1
             X_train, y_train = images_to_mem(train_ids)
             train_ids = train_ids[BATCH_SIZE:]
-            # print("%s images left" % len(train_ids))
+            print("%s images left" % len(train_ids))
 
         # And a full pass over the validation data:
         val_err = 0
