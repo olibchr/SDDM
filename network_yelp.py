@@ -146,7 +146,6 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
 def main(model='cnn', num_epochs=100):
     # Load the dataset
     print("Loading data...") 
-    exit(1)
     X_train, y_train, X_val, y_val, X_test, y_test, image_ids = load_dataset()
 
     # Prepare Theano variables for inputs and targets
