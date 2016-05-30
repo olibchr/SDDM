@@ -25,7 +25,7 @@ IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
-BATCH_SIZE = 20 # Batch size
+BATCH_SIZE = 192 # Batch size
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -85,8 +85,8 @@ def load_dataset():
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        #if len(X_imgs) >= 20000:
-            #break
+        if len(X_imgs) >= 160000:
+            break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
