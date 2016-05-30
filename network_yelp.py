@@ -26,6 +26,7 @@ IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
+image_ids = []
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -57,19 +58,14 @@ def load_img_names():
         img_names = img_name_file.readlines()
     return img_names
 
-def load_dataset():
-    dic = dictionary(META_DATA_FILE)
+def images_to_mem(image_ids):
     
-    
-    images = load_img_names()
-
     X_imgs = []
     y_imgs = []
+    dic = dictionary(META_DATA_FILE)
     
-    count = 0
-
-    for i in range(0, BATCH_SIZE-1):
-        file_path = IMG_DIR + images[i[:-1]] + '.jpg' # -1 to remove "\n" at end of line
+    for img_id in image_ids:
+        file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
             face = misc.imread(file_path)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
@@ -78,46 +74,45 @@ def load_dataset():
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
                 y_imgs.append(dic[img_id])
-            else:
-                pass
                 
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= 160000:
-            break
+        #if len(X_imgs) >= 16000:
+           # break
+        
+    X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
+    X_imgs = np.squeeze(X_imgs, axis=(1,))
+    y_imgs = np.array(y_imgs, dtype=np.int32)
+
+    return X_imgs, y_imgs
+
+def load_dataset():
     
-    images = images[BATCH_SIZE-1:]
+    image_ids = load_img_names()
+    n_imgs = len(image_ids)
     
-    print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
+    #print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
     # test_size == valid_size == train_size / 2
-    n_imgs = len(X_imgs)
-    train_size = n_imgs / 2
-    test_size = n_imgs / 4
-    valid_size = n_imgs - train_size - test_size # use all left over imgs
+    train_size = int(n_imgs / (2/3))
+    test_size = int(n_imgs / (1/6))
+    val_size = n_imgs - train_size - test_size # use all left over imgs
+    
+    train_ids=image_ids[:train_size]
+    test_ids=image_ids[train_size:test_size]
+    val_ids=image_ids[train_size+test_size:]
+    image_ids = image_ids[:train_ids]
+    
+    X_valid, y_valid = images_to_mem(val_ids)
+    X_test, y_test = images_to_mem(test_ids)
+    X_train, y_train = images_to_mem(train_ids[:BATCH_SIZE])
+    
+    del train_ids
+    del val_ids
 
-    # create sets from the back of the imgs list, since this is more efficient in python
-    X_train = np.array(X_imgs[-train_size:], dtype=theano.config.floatX)
-    X_train = np.squeeze(X_train, axis=(1,))
-    y_train = np.array(y_imgs[-train_size:], dtype=np.int32)
-    del X_imgs[-train_size:]
-    del y_imgs[-train_size:]
-
-    X_test = np.array(X_imgs[-test_size:], dtype=theano.config.floatX)
-    X_test = np.squeeze(X_test, axis=(1,))
-    y_test = np.array(y_imgs[-test_size:], dtype=np.int32)
-    del X_imgs[-test_size:]
-    del y_imgs[-test_size:]
-
-    X_valid = np.array(X_imgs[-valid_size:], dtype=theano.config.floatX)
-    X_valid = np.squeeze(X_valid, axis=(1,))
-    y_valid = np.array(y_imgs[-valid_size:], dtype=np.int32)
-    del X_imgs[-valid_size:]
-    del y_imgs[-valid_size:]
-
-    assert len(X_imgs) == 0 and len(y_imgs) == 0 # checks if all imgs are properly used
+    assert len(X_train) == 0 and len(y_train) == 0 # checks if all imgs are properly used
 
     return X_train, y_train, X_valid, y_valid, X_test, y_test
 
@@ -129,11 +124,13 @@ def load_dataset():
 # own custom data iteration function. For small datasets, you can also copy
 # them to GPU at once for slightly improved performance. This would involve
 # several changes in the main program, though, and is not demonstrated here.
+
 def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
     assert len(inputs) == len(targets)
     if shuffle:
         indices = np.arange(len(inputs))
         np.random.shuffle(indices)
+
     for start_idx in range(0, len(inputs) - batchsize + 1, batchsize):
         if shuffle:
             excerpt = indices[start_idx:start_idx + batchsize]
@@ -207,15 +204,19 @@ def main(model='cnn', num_epochs=100):
     print("Starting training...")
     # We iterate over epochs:
     for epoch in range(num_epochs):
+
+        train_ids = image_ids # what we need to load batches
+
         # In each epoch, we do a full pass over the training data:
         train_err = 0
         train_batches = 0
         start_time = time.time()
-        for batch in iterate_minibatches(X_train, y_train, BATCH_SIZE, shuffle=True):
-            inputs, targets = batch
+        for batch in range(1,int(image_ids/BATCH_SIZE)):
+            inputs, targets = X_train, y_train
             train_err += train_fn(inputs, targets)
             train_batches += 1
-            
+            X_train, y_train = images_to_mem(train_ids)
+            train_ids = train_ids[BATCH_SIZE:]
 
         # And a full pass over the validation data:
         val_err = 0
@@ -227,7 +228,6 @@ def main(model='cnn', num_epochs=100):
             val_err += err
             val_acc += acc
             val_batches += 1
-        
 
         # Then we print the results for this epoch:
         print("Epoch {} of {} took {:.3f}s".format(
@@ -237,9 +237,6 @@ def main(model='cnn', num_epochs=100):
         print("  validation accuracy:\t\t{:.2f} %".format(
             val_acc / val_batches * 100))
 
-        X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
-        
-    
     # After training, we compute and print the test error:
     test_err = 0
     test_acc = 0
