@@ -104,7 +104,8 @@ def load_dataset():
     train_ids=image_ids[:train_size]
     test_ids=image_ids[train_size:train_size + test_size]
     val_ids=image_ids[train_size+test_size:]
-    image_ids = image_ids[:train_size]
+    image_ids = image_ids[BATCH_SIZE:train_size]
+    print("%s ids in imageids" % len(image_ids))
 
     X_valid, y_valid = images_to_mem(val_ids)
     X_test, y_test = images_to_mem(test_ids)
@@ -112,7 +113,7 @@ def load_dataset():
     
     del train_ids
     del val_ids
-    assert len(X_train) == len(y_train) # checks if all imgs are properly used
+    assert len(X_test) == len(y_test) # checks if all imgs are properly used
 
     return X_train, y_train, X_valid, y_valid, X_test, y_test
 
@@ -212,16 +213,21 @@ def main(model='cnn', num_epochs=100):
         train_batches = 0
         start_time = time.time()
 
-        print("batches %s" %(len(image_ids)/BATCH_SIZE))
-        print(len(image_ids))
 
-        for batch in range(1, int(len(image_ids)/BATCH_SIZE)):
+        print(len(image_ids))
+        print(len(train_ids))
+        print("batches %s" %(len(image_ids)/BATCH_SIZE))
+
+        # Shuffle the ids
+
+        for batch in range(0, int(len(image_ids)/BATCH_SIZE)):
             inputs, targets = X_train, y_train
             train_err += train_fn(inputs, targets)
             train_batches += 1
             X_train, y_train = images_to_mem(train_ids)
             train_ids = train_ids[BATCH_SIZE:]
             print("%s images left" % len(train_ids))
+
         # And a full pass over the validation data:
         val_err = 0
         val_acc = 0
