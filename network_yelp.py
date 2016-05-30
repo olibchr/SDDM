@@ -26,6 +26,7 @@ IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 5 # Batch size
+MAX_IMGS = 30 # Defined how many images we want to maximally load (for testing)
 image_ids = []
 
 # ################## Network ##################
@@ -79,7 +80,7 @@ def images_to_mem(image_ids):
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= 20:
+        if len(X_imgs) >= MAX_IMGS:
            break
         
     X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
@@ -213,14 +214,11 @@ def main(model='cnn', num_epochs=100):
         train_batches = 0
         start_time = time.time()
 
-
-        print(len(image_ids))
-        print(len(train_ids))
-        print("batches %s" %(len(image_ids)/BATCH_SIZE))
+        print("batches %s" %(MAX_IMGS/BATCH_SIZE))
 
         # Shuffle the ids
 
-        for batch in range(0, int(len(image_ids)/BATCH_SIZE)):
+        for batch in range(0, int(MAX_IMGS/BATCH_SIZE)):
             inputs, targets = X_train, y_train
             train_err += train_fn(inputs, targets)
             train_batches += 1
