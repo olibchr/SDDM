@@ -79,8 +79,8 @@ def images_to_mem(image_idx):
             #print('No image for %s found in %s' % (img_id, file_path))
             pass
 
-        #if len(X_imgs) >= MAX_IMGS:
-           #break
+        if len(X_imgs) >= MAX_IMGS:
+           break
         
     X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
     X_imgs = np.squeeze(X_imgs, axis=(1,))
@@ -223,7 +223,7 @@ def main(model='cnn', num_epochs=100):
             train_batches += 1
             X_train, y_train = images_to_mem(train_ids)
             train_ids = train_ids[BATCH_SIZE:]
-            print("%s images left" % len(train_ids))
+            # print("%s images left" % len(train_ids))
 
         # And a full pass over the validation data:
         val_err = 0
