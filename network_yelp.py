@@ -241,10 +241,10 @@ def main(model='cnn', num_epochs=2):
             print("  validation loss:\t\t{:.6f}".format(val_err / val_batches))
             print("  validation accuracy:\t\t{:.2f} %".format(
                 val_acc / val_batches * 100))
-        else:
-            with np.load('model.npz') as f:
-                param_values = [f['arr_%d' % i] for i in range(len(f.files))]
-            lasagne.layers.set_all_param_values(network, param_values)
+    else:
+        with np.load('model.npz') as f:
+            param_values = [f['arr_%d' % i] for i in range(len(f.files))]
+        lasagne.layers.set_all_param_values(network, param_values)
 
     # After training, we compute and print the test error:
     test_err = 0
