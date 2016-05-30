@@ -10,7 +10,6 @@ from scipy import misc
 import theano
 import theano.tensor as T
 import lasagne
-from PIL import Image
 
 # our imports
 import cnn
@@ -37,6 +36,15 @@ def dictionary(META_DATA_FILE):
             if len(row) > 4:
                 dic[row[0]] = row[4]
     return dic
+
+# returns a cnn network with params initialized from saved params file pointed to by path
+def load_cnn(path):
+    input_var = T.tensor4('inputs')
+    cnn = cnn.build(IMG_X_SIZE, IMG_Y_SIZE, N_CLASSES, input_var)
+    with np.load(path) as f:
+        param_values = [f['arr_%d' % i] for i in range(len(f.files))]
+    lasagne.layers.set_all_param_values(cnn, param_values)
+    return cnn
 
 # returns a dict which if you query it with a img id it returns the according shop id
 def load_img2shop(file):
