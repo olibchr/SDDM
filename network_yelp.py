@@ -104,7 +104,7 @@ def load_dataset():
     train_ids=image_ids[:train_size]
     test_ids=image_ids[train_size:test_size]
     val_ids=image_ids[train_size+test_size:]
-    image_ids = image_ids[:train_ids]
+    image_ids = image_ids[:train_size]
     
     X_valid, y_valid = images_to_mem(val_ids)
     X_test, y_test = images_to_mem(test_ids)
