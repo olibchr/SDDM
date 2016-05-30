@@ -93,7 +93,7 @@ def load_dataset():
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= 10 * BATCH_SIZE:
+        if len(X_imgs) >= 100 * BATCH_SIZE:
             break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
@@ -170,7 +170,9 @@ def main(model='cnn', num_epochs=2):
         network = mlp.build_custom(input_var, int(depth), int(width),
                                    float(drop_in), float(drop_hid))
     elif model == 'cnn':
-        network = cnn.build(IMG_X_SIZE, IMG_Y_SIZE, N_CLASSES, input_var)
+        # network = cnn.build(IMG_X_SIZE, IMG_Y_SIZE, N_CLASSES, input_var)
+        print("Load network from file")
+        network = load_cnn('model.npz')
     else:
         print("Unrecognized model type %r." % model)
         return
@@ -241,9 +243,6 @@ def main(model='cnn', num_epochs=2):
             print("  validation loss:\t\t{:.6f}".format(val_err / val_batches))
             print("  validation accuracy:\t\t{:.2f} %".format(
                 val_acc / val_batches * 100))
-        else:
-            print("Load network from file")
-            network = load_cnn('model.npz')
 
     # After training, we compute and print the test error:
     test_err = 0
