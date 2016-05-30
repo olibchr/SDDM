@@ -85,7 +85,7 @@ def load_dataset():
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= 3 * BATCH_SIZE:
+        if len(X_imgs) >= 10 * BATCH_SIZE:
             break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
