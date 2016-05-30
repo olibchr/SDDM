@@ -68,8 +68,8 @@ def load_dataset():
     
     count = 0
 
-    for img_id in images:
-        file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
+    for i in range(0, BATCH_SIZE-1):
+        file_path = IMG_DIR + images[i[:-1]] + '.jpg' # -1 to remove "\n" at end of line
         try:
             face = misc.imread(file_path)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
@@ -87,7 +87,9 @@ def load_dataset():
 
         if len(X_imgs) >= 160000:
             break
-
+    
+    images = images[BATCH_SIZE-1:]
+    
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
     # test_size == valid_size == train_size / 2
@@ -213,6 +215,7 @@ def main(model='cnn', num_epochs=100):
             inputs, targets = batch
             train_err += train_fn(inputs, targets)
             train_batches += 1
+            
 
         # And a full pass over the validation data:
         val_err = 0
@@ -224,6 +227,7 @@ def main(model='cnn', num_epochs=100):
             val_err += err
             val_acc += acc
             val_batches += 1
+        
 
         # Then we print the results for this epoch:
         print("Epoch {} of {} took {:.3f}s".format(
@@ -233,6 +237,9 @@ def main(model='cnn', num_epochs=100):
         print("  validation accuracy:\t\t{:.2f} %".format(
             val_acc / val_batches * 100))
 
+        X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
+        
+    
     # After training, we compute and print the test error:
     test_err = 0
     test_acc = 0
