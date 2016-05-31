@@ -211,8 +211,10 @@ def main(model='cnn', num_epochs=2):
     # Finally, launch the training loop.
     print("Starting training...")
     # We iterate over epochs:
-    val_err_prev = -1
-    degrading_patience = 10
+    val_err_best = float('inf')
+    valid_error_prev = float('inf')
+    params_best = lasagne.layers.get_all_param_values(network)
+    degrading_patience = 3
     degrading_count = 0
     for epoch in range(num_epochs):
         # In each epoch, we do a full pass over the training data:
@@ -225,13 +227,13 @@ def main(model='cnn', num_epochs=2):
             train_batches += 1
 
         # And a full pass over the validation data:
-        val_err = 0
+        valid_error = 0
         val_acc = 0
         val_batches = 0
         for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=False):
             inputs, targets = batch
             err, acc = val_fn(inputs, targets)
-            val_err += err
+            valid_error += err
             val_acc += acc
             val_batches += 1
 
@@ -239,20 +241,30 @@ def main(model='cnn', num_epochs=2):
         print("Epoch {} of {} took {:.3f}s".format(
             epoch + 1, num_epochs, time.time() - start_time))
         print("  training loss:\t\t{:.6f}".format(train_err / train_batches))
-        print("  validation loss:\t\t{:.6f}".format(val_err / val_batches))
+        print("  validation loss:\t\t{:.6f}".format(valid_error / val_batches))
         print("  validation accuracy:\t\t{:.2f} %".format(
             val_acc / val_batches * 100))
 
-        # early stopping
-        if val_err_prev is not -1 and val_err_prev < val_err:
-            if degrading_patience <= degrading_count:
-                degrading_count += 1
-            else:
-                print("Early stopping")
-                break
+        ##### EARLY STOPPING ####
+        # if the learning rate becomes consistently worse over a time period specified by "patience",
+        # the training is stopped to avoid over fitting
+        if valid_error < valid_error_prev:
+            valid_error_prev = valid_error
+            if valid_error < val_err_best:
+                val_err_best = valid_error
+            degrading_count = 0
         else:
-            val_err_prev = val_err
-            degrading_count = 0 
+            # save network params if they are the best until now, since network is degrading
+            if valid_error <= val_err_best:
+                params_best = lasagne.layers.get_all_param_values(network)
+            if degrading_count < degrading_patience:
+                degrading_count += 1
+                print('Valid error is degrading, tries left:', degrading_patience - degrading_count)
+            else:
+                print("Early stopping, best validation error:", val_err_best,
+                      " current validation err:", valid_error)
+                lasagne.layers.set_all_param_values(network, params_best)
+                break
 
     # After training, we compute and print the test error:
     test_err = 0
