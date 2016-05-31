@@ -28,7 +28,7 @@ IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
 WEIGHT_DECAY = 0.0005
-MAX_IMGS = 10000
+MAX_IMGS = 1000
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -182,7 +182,7 @@ def main(model='cnn', num_epochs=200):
     # thus is lower than LEARN_TRHESH, it is divided by 10 (or in our case,
     # multiplied by LEARN_CHANGE
     LEARN_RATE = theano.shared(np.array(0.01, dtype=theano.config.floatX))
-    LEARN_THRESH = theano.shared(np.array(0.000000000001, dtype=theano.config.floatX))
+    LEARN_THRESH = theano.shared(np.array(0.0, dtype=theano.config.floatX))
     LEARN_CHANGE = theano.shared(np.array(0.1, dtype=theano.config.floatX))
 
     # as per paper we use an initial learning rate of 0.01
