@@ -113,10 +113,7 @@ def load_dataset():
     #### PREPROCESS TRAIN IMGS ####
     # as specified in the paper subtract the mean activity from the pixels
     avg = np.mean(X_train)
-    print "AVG:" + str(avg)
-    print X_train[0]
     X_train = X_train - avg
-    print X_train[0]
 
     X_test = np.array(X_imgs[-test_size:], dtype=theano.config.floatX)
     X_test = np.squeeze(X_test, axis=(1,))
