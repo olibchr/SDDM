@@ -85,7 +85,8 @@ def images_to_mem(image_idx):
                 X_imgs.append(face / np.float32(256))
                 #X_imgs.append(face_lr / np.float32(256))
                 y_vec = [0] * N_CLASSES
-                #y_vec[dic[img_id]] = 1
+                caller = dic[img_id]
+                y_vec[caller] = 1
                 print(y_vec)
                 #print(dic[img_id])
                 #y_imgs.append(y_vec)
