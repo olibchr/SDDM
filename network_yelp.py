@@ -84,14 +84,14 @@ def load_dataset():
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= 10000:
+        if len(X_imgs) >= 100000:
             break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
     # test_size == valid_size == train_size / 2
     n_imgs = len(X_imgs)
-    train_size = int(n_imgs *0.85)
+    train_size = int(n_imgs *0.8)
     test_size = int(n_imgs *0.1)
     valid_size = n_imgs - train_size - test_size # use all left over imgs
 
@@ -234,7 +234,7 @@ def main(model='cnn', num_epochs=200):
         valid_error = 0
         val_acc = 0
         val_batches = 0
-        for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=False):
+        for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=True):
             inputs, targets = batch
             err, acc = val_fn(inputs, targets)
             valid_error += err

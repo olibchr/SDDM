@@ -34,17 +34,26 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
             W=lasagne.init.Normal(weight_init_std, weight_init_mean))
 
     # IMG_NET: 3x3 conv 13x13x192
+    network = lasagne.layers.Conv2DLayer(
+            network, num_filters=192, filter_size=(3, 3),
+            nonlinearity=lasagne.nonlinearities.rectify)
 
-    # IMG_NET: 3x3 conv 13x13x128
+    # IMG_NET: 3x3 conv 13x13x128 + pool
+    network = lasagne.layers.Conv2DLayer(
+            network, num_filters=128, filter_size=(3, 3),
+            nonlinearity=lasagne.nonlinearities.rectify)
+    network = lasagne.layers.MaxPool2DLayer(network, pool_size=(2, 2))
 
     # IMG_NET: dense 2048
     network = lasagne.layers.DenseLayer(
             lasagne.layers.dropout(network, p=.5),
-            num_units=256,
+            num_units=2048,
             nonlinearity=lasagne.nonlinearities.rectify,
             W=lasagne.init.Normal(weight_init_std, weight_init_mean))
 
     # IMG_NET: dense 2048
+
+    # Output Layer
     network = lasagne.layers.DenseLayer(
             lasagne.layers.dropout(network, p=.5),
             num_units=n_classes,
