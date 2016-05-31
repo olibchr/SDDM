@@ -27,12 +27,11 @@ IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
-<<<<<<< HEAD
+
 
 #sys.stdout = open('python_out.txt', 'w')
-=======
+
 WEIGHT_DECAY = 0.0005
->>>>>>> dev
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
