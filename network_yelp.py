@@ -27,7 +27,7 @@ IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
 
-sys.stdout = open('python_out.txt', 'w')
+#sys.stdout = open('python_out.txt', 'w')
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
