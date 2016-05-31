@@ -243,12 +243,6 @@ def main(model='cnn', num_epochs=200):
         print("  validation accuracy:\t\t{:.2f} %".format(
             val_acc / val_batches * 100))
 
-        ### LEARN RATE CHANGE ###
-        if theano.tensor.le(valid_error_prev - valid_error, LEARN_THRESH):
-            LEARN_RATE = LEARN_CHANGE * LEARN_RATE
-            print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: " + str(LEARN_RATE.eval())
-
-
         ##### EARLY STOPPING ####
         # if the learning rate becomes consistently worse over a time period specified by "patience",
         # the training is stopped to avoid over fitting
@@ -257,6 +251,13 @@ def main(model='cnn', num_epochs=200):
             if valid_error < valid_error_best:
                 valid_error_best = valid_error
             degrading_count = 0
+
+            ### LEARN RATE CHANGE ###
+            compare = theano.tensor.le((valid_error_prev - valid_error), LEARN_THRESH.eval())
+            if compare.eval():
+                LEARN_RATE = LEARN_CHANGE * LEARN_RATE
+                print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: " + str(
+                    LEARN_RATE.eval())
         else:
             # as per paper, decrease learning rate as the error on the validation set is
             # only marginal
