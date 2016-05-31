@@ -102,7 +102,7 @@ def images_to_mem(image_idx):
     X_imgs = np.squeeze(X_imgs, axis=(1,))
     y_imgs = np.array(y_imgs, dtype=np.int32)
     print(y_imgs.shape)
-    y_imgs = np.squeeze(y_imgs, axis=(2,))
+    y_imgs = np.squeeze(y_imgs)
     print(y_imgs.shape)
 
 
