@@ -70,12 +70,20 @@ def load_dataset():
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
             face = misc.imread(file_path)
-            print "SHAPE:"+str(face.shape)
+
+            #### DATA AUGMENTATION ####
+            # as per paper add the mirror image of each img
+            # since our img can be in portrait or landscape mode we flip horizontal and vertical
+            face1 = np.fliplr(face)
+
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
+            face1 = face1.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
 
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
+                X_imgs.append(face1 / np.float32(256))
+                y_imgs.append(dic[img_id])
                 y_imgs.append(dic[img_id])
             else:
                 pass
