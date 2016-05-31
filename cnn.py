@@ -52,6 +52,11 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
             W=lasagne.init.Normal(weight_init_std, weight_init_mean))
 
     # IMG_NET: dense 2048
+    network = lasagne.layers.DenseLayer(
+            lasagne.layers.dropout(network, p=.5),
+            num_units=2048,
+            nonlinearity=lasagne.nonlinearities.rectify,
+            W=lasagne.init.Normal(weight_init_std, weight_init_mean))
 
     # Output Layer
     network = lasagne.layers.DenseLayer(
