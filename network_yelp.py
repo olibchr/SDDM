@@ -172,9 +172,9 @@ def main(model='cnn', num_epochs=200):
     loss = loss.mean()
     # We could add some weight decay as well here, see lasagne.regularization.
 
-    # Create update expressions for training, i.e., how to modify the
-    # parameters at each training step. Here, we'll use Stochastic Gradient
-    # Descent (SGD) with Nesterov momentum, but Lasagne offers plenty more.
+    # as per paper we use an initial learning rate of 0.01
+    # we also use a momentum of 0.9, but in contrast with the paper we use
+    # nesterov momentum instead of normal momentum
     params = lasagne.layers.get_all_params(network, trainable=True)
     updates = lasagne.updates.nesterov_momentum(
             loss, params, learning_rate=0.01, momentum=0.9)
