@@ -72,7 +72,6 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
 
     # Output Layer
     network = lasagne.layers.DenseLayer(
-            lasagne.layers.dropout(network, p=.5),
             num_units=n_classes,
             nonlinearity=lasagne.nonlinearities.softmax,
             W=lasagne.init.Normal(weight_init_std, weight_init_mean),
