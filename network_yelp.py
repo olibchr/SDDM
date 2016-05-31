@@ -245,6 +245,9 @@ def main(model='cnn', num_epochs=200):
         print("  validation accuracy:\t\t{:.2f} %".format(
             val_acc / val_batches * 100))
 
+        print LEARN_RATE
+        exit(1)
+
         ### LEARN RATE CHANGE ###
         if theano.tensor.gt(valid_error_prev - valid_error, LEARN_THRESH):
         # if LEARN_THRESH >= valid_error_prev - valid_error:
