@@ -21,13 +21,13 @@ import mlp
 N_CLASSES = 9  # number of output units
 
 IMG_DIR = 'photos_resized/photos_resized/'
-META_DATA_FILE = 'meta/image_meta.csv'
+META_DATA_FILE = 'meta/image_meta_rest.csv'
 IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 20 # Batch size
-MAX_IMGS = 1000
+MAX_IMGS = 2000
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
