@@ -186,7 +186,7 @@ def main(model='cnn', num_epochs=200):
     # nesterov momentum instead of normal momentum
     params = lasagne.layers.get_all_params(network, trainable=True)
     updates = lasagne.updates.nesterov_momentum(
-            loss, params, learning_rate=LEARN_RATE, momentum=0.9)
+            loss, params, learning_rate= global LEARN_RATE, momentum=0.9)
 
     # Create a loss expression for validation/testing. The crucial difference
     # here is that we do a deterministic forward pass through the network,
@@ -247,7 +247,7 @@ def main(model='cnn', num_epochs=200):
         if theano.tensor.gt(valid_error_prev - valid_error, LEARN_THRESH):
         # if LEARN_THRESH >= valid_error_prev - valid_error:
             print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: " + str(LEARN_RATE)
-            # LEARN_RATE = LEARN_CHANGE * LEARN_RATE
+            LEARN_RATE = LEARN_CHANGE * LEARN_RATE
 
         ##### EARLY STOPPING ####
         # if the learning rate becomes consistently worse over a time period specified by "patience",
