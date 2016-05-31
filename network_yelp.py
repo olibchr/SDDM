@@ -27,7 +27,6 @@ IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
-WEIGHT_DECAY = 0.0005
 MAX_IMGS = 10000
 
 # ################## Network ##################
@@ -150,7 +149,7 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
 # Everything else will be handled in our main program now. We could pull out
 # more functions to better separate the code, but it wouldn't make it any
 # easier to read.
-def main(model='cnn', num_epochs=200):
+def main(model='cnn', num_epochs=2):
     # Load the dataset
     print("Loading data...")
     X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
@@ -181,26 +180,14 @@ def main(model='cnn', num_epochs=200):
 
     loss = lasagne.objectives.categorical_crossentropy(prediction, target_var)
     loss = loss.mean()
+    # We could add some weight decay as well here, see lasagne.regularization.
 
-    # Also add weight decay to the cost function
-    weight_decay = regularize_layer_params(network, l1) * WEIGHT_DECAY
-    loss += weight_decay
-
-    # learning rate params
-    # as per paper we start of with a learn rate of 0.01,
-    # if the error on the validation set does not improve significantly,
-    # thus is lower than LEARN_TRHESH, it is divided by 10 (or in our case,
-    # multiplied by LEARN_CHANGE
-    LEARN_RATE = theano.shared(np.array(0.01, dtype=theano.config.floatX))
-    LEARN_THRESH = theano.shared(np.array(0.0, dtype=theano.config.floatX))
-    LEARN_CHANGE = theano.shared(np.array(0.1, dtype=theano.config.floatX))
-
-    # as per paper we use an initial learning rate of 0.01
-    # we also use a momentum of 0.9, but in contrast with the paper we use
-    # nesterov momentum instead of normal momentum
+    # Create update expressions for training, i.e., how to modify the
+    # parameters at each training step. Here, we'll use Stochastic Gradient
+    # Descent (SGD) with Nesterov momentum, but Lasagne offers plenty more.
     params = lasagne.layers.get_all_params(network, trainable=True)
     updates = lasagne.updates.nesterov_momentum(
-            loss, params, learning_rate=LEARN_RATE, momentum=0.9)
+            loss, params, learning_rate=0.01, momentum=0.9)
 
     # Create a loss expression for validation/testing. The crucial difference
     # here is that we do a deterministic forward pass through the network,
@@ -223,11 +210,6 @@ def main(model='cnn', num_epochs=200):
     # Finally, launch the training loop.
     print("Starting training...")
     # We iterate over epochs:
-    valid_error_best = float('inf')
-    valid_error_prev = float('inf')
-    params_best = lasagne.layers.get_all_param_values(network)
-    degrading_patience = sys.maxint
-    degrading_count = 0
     for epoch in range(num_epochs):
         # In each epoch, we do a full pass over the training data:
         train_err = 0
@@ -239,13 +221,13 @@ def main(model='cnn', num_epochs=200):
             train_batches += 1
 
         # And a full pass over the validation data:
-        valid_error = 0
+        val_err = 0
         val_acc = 0
         val_batches = 0
-        for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=True):
+        for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=False):
             inputs, targets = batch
             err, acc = val_fn(inputs, targets)
-            valid_error += err
+            val_err += err
             val_acc += acc
             val_batches += 1
 
@@ -253,39 +235,9 @@ def main(model='cnn', num_epochs=200):
         print("Epoch {} of {} took {:.3f}s".format(
             epoch + 1, num_epochs, time.time() - start_time))
         print("  training loss:\t\t{:.6f}".format(train_err / train_batches))
-        print("  validation loss:\t\t{:.6f}".format(valid_error / val_batches))
+        print("  validation loss:\t\t{:.6f}".format(val_err / val_batches))
         print("  validation accuracy:\t\t{:.2f} %".format(
             val_acc / val_batches * 100))
-
-        ##### EARLY STOPPING ####
-        # if the learning rate becomes consistently worse over a time period specified by "patience",
-        # the training is stopped to avoid over fitting
-        if valid_error <= valid_error_prev:
-            valid_error_prev = valid_error
-            if valid_error < valid_error_best:
-                valid_error_best = valid_error
-            degrading_count = 0
-
-            ### LEARN RATE CHANGE ###
-            compare = theano.tensor.lt((valid_error_prev - valid_error), LEARN_THRESH.eval())
-            if compare.eval():
-                LEARN_RATE = LEARN_CHANGE * LEARN_RATE
-                print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: " + str(
-                    LEARN_RATE.eval())
-        else:
-            # as per paper, decrease learning rate as the error on the validation set is
-            # only marginal
-            # save network params if they are the best until now, since network is degrading
-            if valid_error <= valid_error_best:
-                params_best = lasagne.layers.get_all_param_values(network)
-            if degrading_count < degrading_patience:
-                degrading_count += 1
-                print('Valid error is degrading, tries left:', degrading_patience - degrading_count)
-            else:
-                print("Early stopping, best validation error:", valid_error_best,
-                      " current validation err:", valid_error)
-                lasagne.layers.set_all_param_values(network, params_best)
-                break
 
     # After training, we compute and print the test error:
     test_err = 0
