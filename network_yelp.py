@@ -112,8 +112,8 @@ def load_dataset():
 
     #### PREPROCESS TRAIN IMGS ####
     # as specified in the paper subtract the mean activity from the pixels
-    print "AVG:" + str(avg)
     avg = np.mean(X_train)
+    print "AVG:" + str(avg)
     print X_imgs[0]
     X_imgs = X_imgs - avg
     print X_imgs[0]
