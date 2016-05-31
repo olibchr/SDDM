@@ -119,6 +119,11 @@ def load_dataset():
     X_valid, y_valid = images_to_mem(val_ids)
     X_test, y_test = images_to_mem(test_ids)
     X_train, y_train = images_to_mem(train_ids)
+    
+    #### PREPROCESS TRAIN IMGS ####
+    # as specified in the paper subtract the mean activity from the pixels
+    avg = np.mean(X_train)
+    X_train = X_train - avg
 
     del train_ids
     del val_ids
