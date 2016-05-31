@@ -83,8 +83,8 @@ def images_to_mem(image_idx):
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
                 X_imgs.append(face_lr / np.float32(256))
-                y_imgs.append(dic[img])
-                y_imgs.append(dic[img])
+                y_imgs.append(dic[img_id])
+                y_imgs.append(dic[img_id])
 
 
         except Exception as e:
