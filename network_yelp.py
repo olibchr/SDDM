@@ -9,8 +9,10 @@ from scipy import misc
 # neural network imports
 import theano
 import theano.tensor as T
+import theano.printing as thprint
 import lasagne
 from PIL import Image
+
 
 # our imports
 import cnn
@@ -246,8 +248,9 @@ def main(model='cnn', num_epochs=200):
         ### LEARN RATE CHANGE ###
         if theano.tensor.gt(valid_error_prev - valid_error, LEARN_THRESH):
         # if LEARN_THRESH >= valid_error_prev - valid_error:
-            print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: " + str(LEARN_RATE)
+            print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: "
             LEARN_RATE = LEARN_CHANGE * LEARN_RATE
+            thprint.Print(LEARN_RATE)
 
         ##### EARLY STOPPING ####
         # if the learning rate becomes consistently worse over a time period specified by "patience",
