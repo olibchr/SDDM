@@ -61,7 +61,6 @@ def load_img_names():
 
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
-
     images = load_img_names()
 
     X_imgs = []
@@ -71,11 +70,19 @@ def load_dataset():
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
             face = misc.imread(file_path)
+
+            #### DATA AUGMENTATION ####
+            # as per paper add the (horizontal) mirror image of each img
+            face_lr = np.fliplr(face)
+
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
+            face_lr = face_lr.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
 
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
+                X_imgs.append(face_lr / np.float32(256))
+                y_imgs.append(dic[img_id])
                 y_imgs.append(dic[img_id])
             else:
                 pass
@@ -84,7 +91,7 @@ def load_dataset():
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= 100000:
+        if len(X_imgs) >= 10 * BATCH_SIZE:
             break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
