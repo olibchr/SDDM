@@ -87,10 +87,10 @@ def images_to_mem(image_idx):
                 y_vec = [0] * N_CLASSES
                 caller = abs(int(dic[img_id]))
                 y_vec[caller] = 1
+                print(y_vec)
+                y_imgs.append(y_vec)
+                y_imgs.append(y_vec)
 
-                y_imgs.append([y_vec])
-                y_imgs.append([y_vec])
-                print(y_imgs)
 
 
         except Exception as e:
@@ -101,6 +101,7 @@ def images_to_mem(image_idx):
     X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
     X_imgs = np.squeeze(X_imgs, axis=(1,))
     y_imgs = np.array(y_imgs, dtype=np.int32)
+    y_imgs = np.squeeze(y_imgs, axis=(1,))
 
 
     print("loaded %s images" % len(X_imgs))
