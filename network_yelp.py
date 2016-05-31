@@ -257,7 +257,7 @@ def main(model='cnn', num_epochs=200):
             degrading_count = 0
 
             ### LEARN RATE CHANGE ###
-            compare = theano.tensor.le((valid_error_prev - valid_error), LEARN_THRESH.eval())
+            compare = theano.tensor.ls((valid_error_prev - valid_error), LEARN_THRESH.eval())
             if compare.eval():
                 LEARN_RATE = LEARN_CHANGE * LEARN_RATE
                 print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: " + str(
