@@ -246,7 +246,11 @@ def main(model='cnn', num_epochs=200):
             val_acc / val_batches * 100))
 
         ### LEARN RATE CHANGE ###
-        if theano.tensor.le((valid_error_prev - valid_error), LEARN_THRESH):
+        compare = theano.tensor.le((valid_error_prev - valid_error), LEARN_THRESH)
+        print compare
+        compare = theano.tensor.gt((valid_error_prev - valid_error), LEARN_THRESH)
+        print compare
+        if compare:
         # if LEARN_THRESH >= valid_error_prev - valid_error:
             LEARN_RATE = LEARN_CHANGE * LEARN_RATE
             print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: " + str(LEARN_RATE.eval())
