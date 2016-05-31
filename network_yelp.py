@@ -28,7 +28,7 @@ IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
 WEIGHT_DECAY = 0.0005
-MAX_IMGS = 1000
+MAX_IMGS = 100000
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -216,7 +216,7 @@ def main(model='cnn', num_epochs=200):
     valid_error_best = float('inf')
     valid_error_prev = float('inf')
     params_best = lasagne.layers.get_all_param_values(network)
-    degrading_patience = 3
+    degrading_patience = int('inf')
     degrading_count = 0
     for epoch in range(num_epochs):
         # In each epoch, we do a full pass over the training data:
@@ -257,7 +257,7 @@ def main(model='cnn', num_epochs=200):
             degrading_count = 0
 
             ### LEARN RATE CHANGE ###
-            compare = theano.tensor.ls((valid_error_prev - valid_error), LEARN_THRESH.eval())
+            compare = theano.tensor.lt((valid_error_prev - valid_error), LEARN_THRESH.eval())
             if compare.eval():
                 LEARN_RATE = LEARN_CHANGE * LEARN_RATE
                 print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: " + str(
