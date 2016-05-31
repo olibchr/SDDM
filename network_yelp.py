@@ -26,8 +26,8 @@ IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
-BATCH_SIZE = 10 # Batch size
-MAX_IMGS = 100
+BATCH_SIZE = 2 # Batch size
+MAX_IMGS = 10
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -75,7 +75,6 @@ def images_to_mem(image_idx):
             #### DATA AUGMENTATION ####
             # as per paper add the (horizontal) mirror image of each img
             face_lr = np.fliplr(face)
-            face = np.memmap(file_path, dtype=np.uint8, shape=(224, 224, 1))
 
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
             face_lr = face_lr.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
@@ -83,14 +82,9 @@ def images_to_mem(image_idx):
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
-                #X_imgs.append(face_lr / np.float32(256))
-                y_vec = [0] * N_CLASSES
-                caller = abs(int(dic[img_id]))
-                y_vec[caller] = 1
-                print(y_vec)
-                y_imgs.append(y_vec)
-                #y_imgs.append(y_vec)
-
+                X_imgs.append(face_lr / np.float32(256))
+                y_imgs.append(dic[img])
+                y_imgs.append(dic[img])
 
 
         except Exception as e:
@@ -101,9 +95,6 @@ def images_to_mem(image_idx):
     X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
     X_imgs = np.squeeze(X_imgs, axis=(1,))
     y_imgs = np.array(y_imgs, dtype=np.int32)
-    print(y_imgs.shape)
-    y_imgs = np.squeeze(y_imgs)
-    print(y_imgs.shape)
 
 
     print("loaded %s images" % len(X_imgs))
@@ -232,8 +223,6 @@ def main(model='cnn', num_epochs=50):
         start_time = time.time()
         for batch in iterate_minibatches(X_train, y_train, BATCH_SIZE, shuffle=True):
             inputs, targets = batch
-            print(targets)
-            exit()
             train_err += train_fn(inputs, targets)
             train_batches += 1
 
