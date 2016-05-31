@@ -27,6 +27,7 @@ IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
+WEIGHT_DECAY = 0.0005
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -173,7 +174,6 @@ def main(model='cnn', num_epochs=200):
     loss = loss.mean()
 
     # Also add weight decay to the cost function
-    WEIGHT_DECAY = 0.0005
     weight_decay = regularize_layer_params(network, l1) * WEIGHT_DECAY
     loss += weight_decay
 
