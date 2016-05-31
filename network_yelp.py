@@ -85,13 +85,13 @@ def images_to_mem(image_idx):
                 X_imgs.append(face / np.float32(256))
                 #X_imgs.append(face_lr / np.float32(256))
                 y_vec = [0] * N_CLASSES
-                caller = dic[img_id]
+                caller = abs(int(dic[img_id]))
                 y_vec[caller] = 1
                 print(y_vec)
-                #print(dic[img_id])
+                print(dic[img_id])
+                y_imgs.append(y_vec)
                 #y_imgs.append(y_vec)
-                #y_imgs.append(y_vec)
-                y_imgs.append(dic[img_id])
+                #y_imgs.append(dic[img_id])
 
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
