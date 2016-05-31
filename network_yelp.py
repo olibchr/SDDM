@@ -245,15 +245,11 @@ def main(model='cnn', num_epochs=200):
         print("  validation accuracy:\t\t{:.2f} %".format(
             val_acc / val_batches * 100))
 
-        print LEARN_RATE.eval()
-        exit(1)
-
         ### LEARN RATE CHANGE ###
         if theano.tensor.gt(valid_error_prev - valid_error, LEARN_THRESH):
         # if LEARN_THRESH >= valid_error_prev - valid_error:
             LEARN_RATE = LEARN_CHANGE * LEARN_RATE
-            print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: "
-            print LEARN_RATE
+            print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: " + str(LEARN_RATE.eval())
 
 
         ##### EARLY STOPPING ####
