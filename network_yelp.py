@@ -10,6 +10,7 @@ from scipy import misc
 import theano
 import theano.tensor as T
 import lasagne
+from lasagne.regularization import regularize_layer_params, regularize_layer_params_weighted, l1 
 
 
 # our imports
