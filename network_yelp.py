@@ -250,7 +250,7 @@ def main(model='cnn', num_epochs=200):
         print compare.eval()
         compare = theano.tensor.gt((valid_error_prev - valid_error), LEARN_THRESH.eval())
         print compare.eval()
-        if compare:
+        if compare.eval():
         # if LEARN_THRESH >= valid_error_prev - valid_error:
             LEARN_RATE = LEARN_CHANGE * LEARN_RATE
             print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: " + str(LEARN_RATE.eval())
