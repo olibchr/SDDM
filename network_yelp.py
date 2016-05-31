@@ -176,8 +176,9 @@ def main(model='cnn', num_epochs=200):
     # we also use a momentum of 0.9, but in contrast with the paper we use
     # nesterov momentum instead of normal momentum
     params = lasagne.layers.get_all_params(network, trainable=True)
+    learning_rate = theano.shared(0.01)
     updates = lasagne.updates.nesterov_momentum(
-            loss, params, learning_rate=0.01, momentum=0.9)
+            loss, params, learning_rate=learning_rate, momentum=0.9)
 
     # Create a loss expression for validation/testing. The crucial difference
     # here is that we do a deterministic forward pass through the network,
