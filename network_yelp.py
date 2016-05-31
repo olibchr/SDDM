@@ -70,7 +70,8 @@ def images_to_mem(image_idx):
     for img_id in image_idx:
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
-            face = np.memmap(file_path, dtype=np.uint8, shape=(224, 224, 1))
+            face = misc.imread(file_path)
+            #face = np.memmap(file_path, dtype=np.uint8, shape=(224, 224, 1))
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
 
             img_id = img_id[:22]
