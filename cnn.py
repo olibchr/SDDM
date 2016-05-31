@@ -26,6 +26,7 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
             network, num_filters=128, filter_size=(5, 5),
             nonlinearity=lasagne.nonlinearities.rectify,
             W=lasagne.init.Normal(weight_init_std, weight_init_mean))
+    network = lasagne.layers.LocalResponseNormalization2DLayer(network)
     network = lasagne.layers.MaxPool2DLayer(network, pool_size=(2, 2))
 
     # IMG_NET: 3x3 conv 13x13x192
