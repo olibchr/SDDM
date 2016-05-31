@@ -17,15 +17,15 @@ import cnn
 import mlp
 
 # ################## CONSTANTS ##################
-N_CLASSES = 2  # number of output units
+N_CLASSES = 9  # number of output units
 
 IMG_DIR = 'photos_resized/photos_resized/'
 META_DATA_FILE = 'meta/image_meta.csv'
 IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
-IMG_Y_SIZE = 400
-IMG_X_SIZE = 400
-BATCH_SIZE = 10 # Batch size
+IMG_Y_SIZE = 224
+IMG_X_SIZE = 224
+BATCH_SIZE = 192 # Batch size
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -34,11 +34,8 @@ def dictionary(META_DATA_FILE):
     with open(META_DATA_FILE, 'rb') as f:
         reader = csv.reader(f)
         for row in reader:
-            if len(row) > 7:
-                if row[7] == '1':
-                    dic[row[0]] = 1
-                else:
-                    dic[row[0]] = 0
+            if len(row) > 4:
+                dic[row[0]] = row[4]
     return dic
 
 # returns a dict which if you query it with a img id it returns the according shop id
@@ -66,36 +63,28 @@ def load_dataset():
 
     X_imgs = []
     y_imgs = []
-    
-    count = 0
 
     for img_id in images:
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
-            col = Image.open(file_path)
-            gray = col.convert('L')
-            gray.save(file_path)
-
             face = misc.imread(file_path)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
             
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
-                y_imgs .append(dic[img_id])
+                y_imgs.append(dic[img_id])
             else:
-                print('No entry for %s found!' % (img_id))
+                pass
                 
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
+            #pass
 
-        count += 1
-        # print "loaded imgs: " + str(len(X_train))
-
-        if len(X_imgs) >= 30:
+        if len(X_imgs) >= 10 * BATCH_SIZE:
             break
 
-    print "loaded imgs: all " + str(len(X_imgs)) + " images"
+    print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
     # test_size == valid_size == train_size / 2
     n_imgs = len(X_imgs)
