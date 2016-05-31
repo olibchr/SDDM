@@ -37,7 +37,10 @@ def dictionary(META_DATA_FILE):
         reader = csv.reader(f)
         for row in reader:
             if len(row) > 7:
-                dic[row[0]] = row[7]
+                if row[7] == '1':
+                    dic[row[0]] = 1
+                else:
+                    dic[row[0]] = 0
     return dic
 
 # returns a dict which if you query it with a img id it returns the according shop id
