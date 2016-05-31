@@ -5,7 +5,6 @@ import csv
 import json
 import numpy as np
 from scipy import misc
-import os
 
 # neural network imports
 import theano
@@ -27,6 +26,8 @@ IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
+
+sys.stdout = open('python_out.txt', 'w')
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
