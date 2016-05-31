@@ -232,6 +232,8 @@ def main(model='cnn', num_epochs=50):
         start_time = time.time()
         for batch in iterate_minibatches(X_train, y_train, BATCH_SIZE, shuffle=True):
             inputs, targets = batch
+            print(targets)
+            exit()
             train_err += train_fn(inputs, targets)
             train_batches += 1
 
