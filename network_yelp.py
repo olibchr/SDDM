@@ -70,7 +70,7 @@ def images_to_mem(image_idx):
     for img_id in image_idx:
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
-            face = misc.imread(file_path)
+            face = np.memmap(file_path, dtype=np.uint8, shape=(224, 224, 1))
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
 
             img_id = img_id[:22]
@@ -182,7 +182,7 @@ def main(model='cnn', num_epochs=200):
     # thus is lower than LEARN_TRHESH, it is divided by 10 (or in our case,
     # multiplied by LEARN_CHANGE
     LEARN_RATE = theano.shared(np.array(0.01, dtype=theano.config.floatX))
-    LEARN_THRESH = theano.shared(np.array(0.001, dtype=theano.config.floatX))
+    LEARN_THRESH = theano.shared(np.array(0.000000000001, dtype=theano.config.floatX))
     LEARN_CHANGE = theano.shared(np.array(0.1, dtype=theano.config.floatX))
 
     # as per paper we use an initial learning rate of 0.01
