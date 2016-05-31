@@ -244,7 +244,7 @@ def main(model='cnn', num_epochs=200):
             val_acc / val_batches * 100))
 
         ### LEARN RATE CHANGE ###
-        if valid_error_prev - valid_error < LEARN_THRESH:
+        if LEARN_THRESH >= valid_error_prev - valid_error:
             print "marginal improvement, change learn rate"
             LEARN_CHANGE * LEARN_RATE
 
