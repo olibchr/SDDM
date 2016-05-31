@@ -74,24 +74,24 @@ def images_to_mem(image_idx):
 
             #### DATA AUGMENTATION ####
             # as per paper add the (horizontal) mirror image of each img
-            #face_lr = np.fliplr(face)
-            #face = np.memmap(file_path, dtype=np.uint8, shape=(224, 224, 1))
+            face_lr = np.fliplr(face)
+            face = np.memmap(file_path, dtype=np.uint8, shape=(224, 224, 1))
 
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
-            #face_lr = face_lr.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
+            face_lr = face_lr.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
 
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
-                #X_imgs.append(face_lr / np.float32(256))
+                X_imgs.append(face_lr / np.float32(256))
                 y_vec = [0] * N_CLASSES
                 caller = abs(int(dic[img_id]))
                 y_vec[caller] = 1
-                print(y_vec)
-                print(dic[img_id])
-                y_imgs.append(y_vec)
-                #y_imgs.append(y_vec)
-                #y_imgs.append(dic[img_id])
+
+                y_imgs.append([y_vec])
+                y_imgs.append([y_vec])
+                print(y_imgs)
+
 
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
