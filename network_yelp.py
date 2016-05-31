@@ -91,7 +91,7 @@ def load_dataset():
 
     # test_size == valid_size == train_size / 2
     n_imgs = len(X_imgs)
-    train_size = int(n_imgs *0.85)
+    train_size = int(n_imgs *0.8)
     test_size = int(n_imgs *0.1)
     valid_size = n_imgs - train_size - test_size # use all left over imgs
 
@@ -217,7 +217,7 @@ def main(model='cnn', num_epochs=20):
         val_err = 0
         val_acc = 0
         val_batches = 0
-        for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=False):
+        for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=True):
             inputs, targets = batch
             err, acc = val_fn(inputs, targets)
             val_err += err
