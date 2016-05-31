@@ -18,10 +18,10 @@ import cnn
 import mlp
 
 # ################## CONSTANTS ##################
-N_CLASSES = 9  # number of output units
+N_CLASSES = 2  # number of output units
 
 IMG_DIR = 'photos_resized/photos_resized/'
-META_DATA_FILE = 'meta/image_meta_rest.csv'
+META_DATA_FILE = 'meta/image_meta.csv'
 IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
@@ -36,8 +36,8 @@ def dictionary(META_DATA_FILE):
     with open(META_DATA_FILE, 'rb') as f:
         reader = csv.reader(f)
         for row in reader:
-            if len(row) > 4:
-                dic[row[0]] = row[4]
+            if len(row) > 7:
+                dic[row[0]] = row[7]
     return dic
 
 # returns a dict which if you query it with a img id it returns the according shop id
