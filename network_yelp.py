@@ -28,6 +28,7 @@ IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
 WEIGHT_DECAY = 0.0005
+MAX_IMGS = 10000
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -59,15 +60,14 @@ def load_img_names():
         img_names = img_name_file.readlines()
     return img_names
 
-def load_dataset():
-    dic = dictionary(META_DATA_FILE)
+def images_to_mem(image_idx):
 
-    images = load_img_names()
-
+    print "Putting images into memory for %s images" % (len(image_idx))
     X_imgs = []
     y_imgs = []
+    dic = dictionary(META_DATA_FILE)
 
-    for img_id in images:
+    for img_id in image_idx:
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
             face = misc.imread(file_path)
@@ -77,44 +77,42 @@ def load_dataset():
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
                 y_imgs.append(dic[img_id])
-            else:
-                pass
 
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
-            #pass
+            pass
 
-        if len(X_imgs) >= 100000:
-            break
+        if len(X_imgs) >= MAX_IMGS:
+           break
 
-    print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
+    X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
+    X_imgs = np.squeeze(X_imgs, axis=(1,))
+    y_imgs = np.array(y_imgs, dtype=np.int32)
+
+    print("loaded %s images" % len(X_imgs))
+    return X_imgs, y_imgs
+
+def load_dataset():
+
+    image_ids = load_img_names()
+    n_imgs = len(image_ids)
 
     # test_size == valid_size == train_size / 2
-    n_imgs = len(X_imgs)
-    train_size = int(n_imgs *0.8)
-    test_size = int(n_imgs *0.1)
-    valid_size = n_imgs - train_size - test_size # use all left over imgs
+    train_size = int(n_imgs * 0.8)
+    test_size = int(n_imgs * 0.1)
+    val_size = n_imgs - train_size - test_size # use all left over imgs
 
-    # create sets from the back of the imgs list, since this is more efficient in python
-    X_train = np.array(X_imgs[-train_size:], dtype=theano.config.floatX)
-    X_train = np.squeeze(X_train, axis=(1,))
-    y_train = np.array(y_imgs[-train_size:], dtype=np.int32)
-    del X_imgs[-train_size:]
-    del y_imgs[-train_size:]
+    train_ids=image_ids[:train_size]
+    test_ids=image_ids[train_size:train_size + test_size]
+    val_ids=image_ids[train_size+test_size:]
 
-    X_test = np.array(X_imgs[-test_size:], dtype=theano.config.floatX)
-    X_test = np.squeeze(X_test, axis=(1,))
-    y_test = np.array(y_imgs[-test_size:], dtype=np.int32)
-    del X_imgs[-test_size:]
-    del y_imgs[-test_size:]
+    X_valid, y_valid = images_to_mem(val_ids)
+    X_test, y_test = images_to_mem(test_ids)
+    X_train, y_train = images_to_mem(train_ids)
 
-    X_valid = np.array(X_imgs[-valid_size:], dtype=theano.config.floatX)
-    X_valid = np.squeeze(X_valid, axis=(1,))
-    y_valid = np.array(y_imgs[-valid_size:], dtype=np.int32)
-    del X_imgs[-valid_size:]
-    del y_imgs[-valid_size:]
-
-    assert len(X_imgs) == 0 and len(y_imgs) == 0 # checks if all imgs are properly used
+    del train_ids
+    del val_ids
+    assert len(X_train) == len(y_train)
 
     return X_train, y_train, X_valid, y_valid, X_test, y_test
 
