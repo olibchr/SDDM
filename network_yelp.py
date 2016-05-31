@@ -5,6 +5,7 @@ import csv
 import json
 import numpy as np
 from scipy import misc
+import os
 
 # neural network imports
 import theano
@@ -25,7 +26,7 @@ IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
-BATCH_SIZE = 50 # Batch size
+BATCH_SIZE = 192 # Batch size
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -83,7 +84,7 @@ def load_dataset():
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= 10000:
+        if len(X_imgs) >= 80000:
             break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
@@ -141,7 +142,7 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
 # Everything else will be handled in our main program now. We could pull out
 # more functions to better separate the code, but it wouldn't make it any
 # easier to read.
-def main(model='cnn', num_epochs=2):
+def main(model='cnn', num_epochs=20):
     # Load the dataset
     print("Loading data...")
     X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
