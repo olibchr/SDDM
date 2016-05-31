@@ -230,7 +230,7 @@ def main(model='cnn', num_epochs=50):
         val_err = 0
         val_acc = 0
         val_batches = 0
-        for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=False):
+        for batch in iterate_minibatches(X_val, y_val, BATCH_SIZE, shuffle=True):
             inputs, targets = batch
             err, acc = val_fn(inputs, targets)
             val_err += err
