@@ -74,15 +74,19 @@ def load_dataset():
             #### DATA AUGMENTATION ####
             # as per paper add the mirror image of each img
             # since our img can be in portrait or landscape mode we flip horizontal and vertical
-            face1 = np.fliplr(face)
+            face_lr = np.fliplr(face)
+            face_ud = np.flipud(face)
 
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
-            face1 = face1.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
+            face_lr = face_lr.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
+            face_ud = face_ud.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
 
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
-                X_imgs.append(face1 / np.float32(256))
+                X_imgs.append(face_lr / np.float32(256))
+                X_imgs.append(face_ud / np.float32(256))
+                y_imgs.append(dic[img_id])
                 y_imgs.append(dic[img_id])
                 y_imgs.append(dic[img_id])
             else:
