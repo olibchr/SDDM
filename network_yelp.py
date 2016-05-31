@@ -27,6 +27,15 @@ IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
 
+# learning rate params
+# as per paper we start of with a learn rate of 0.01,
+# if the error on the validation set does not improve significantly,
+# thus is lower than LEARN_TRHESH, it is divided by 10 (or in our case,
+# multiplied by LEARN_CHANGE
+LEARN_RATE = theano.shared(np.array(0.01, dtype=theano.config.floatX))
+LEARN_THRESH = theano.shared(np.array(0.001, dtype=theano.config.floatX))
+LEARN_CHANGE = theano.shared(np.array(0.1, dtype=theano.config.floatX))
+
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
     print "Loading meta data"
@@ -176,9 +185,8 @@ def main(model='cnn', num_epochs=200):
     # we also use a momentum of 0.9, but in contrast with the paper we use
     # nesterov momentum instead of normal momentum
     params = lasagne.layers.get_all_params(network, trainable=True)
-    lr = theano.shared(np.array(0.01, dtype=theano.config.floatX))
     updates = lasagne.updates.nesterov_momentum(
-            loss, params, learning_rate=lr, momentum=0.9)
+            loss, params, learning_rate=LEARN_RATE, momentum=0.9)
 
     # Create a loss expression for validation/testing. The crucial difference
     # here is that we do a deterministic forward pass through the network,
@@ -201,7 +209,7 @@ def main(model='cnn', num_epochs=200):
     # Finally, launch the training loop.
     print("Starting training...")
     # We iterate over epochs:
-    val_err_best = float('inf')
+    valid_error_best = float('inf')
     valid_error_prev = float('inf')
     params_best = lasagne.layers.get_all_param_values(network)
     degrading_patience = 3
@@ -235,23 +243,30 @@ def main(model='cnn', num_epochs=200):
         print("  validation accuracy:\t\t{:.2f} %".format(
             val_acc / val_batches * 100))
 
+        ### LEARN RATE CHANGE ###
+        if valid_error_prev - valid_error < LEARN_THRESH:
+            print "marginal improvement, change learn rate"
+            LEARN_CHANGE * LEARN_RATE
+
         ##### EARLY STOPPING ####
         # if the learning rate becomes consistently worse over a time period specified by "patience",
         # the training is stopped to avoid over fitting
         if valid_error <= valid_error_prev:
             valid_error_prev = valid_error
-            if valid_error < val_err_best:
-                val_err_best = valid_error
+            if valid_error < valid_error_best:
+                valid_error_best = valid_error
             degrading_count = 0
         else:
+            # as per paper, decrease learning rate as the error on the validation set is
+            # only marginal
             # save network params if they are the best until now, since network is degrading
-            if valid_error <= val_err_best:
+            if valid_error <= valid_error_best:
                 params_best = lasagne.layers.get_all_param_values(network)
             if degrading_count < degrading_patience:
                 degrading_count += 1
                 print('Valid error is degrading, tries left:', degrading_patience - degrading_count)
             else:
-                print("Early stopping, best validation error:", val_err_best,
+                print("Early stopping, best validation error:", valid_error_best,
                       " current validation err:", valid_error)
                 lasagne.layers.set_all_param_values(network, params_best)
                 break
