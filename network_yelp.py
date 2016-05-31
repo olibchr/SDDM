@@ -61,14 +61,14 @@ def load_img_names():
     return img_names
 
 
-def images_to_mem(image_idx):
+def images_to_mem(image_ids):
 
-    print "Putting images into memory for %s images" % (len(image_idx))
+    print "Putting images into memory for %s images" % (len(image_ids))
     X_imgs = []
     y_imgs = []
     dic = dictionary(META_DATA_FILE)
 
-    for img_id in image_idx:
+    for img_id in image_ids:
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
             face = misc.imread(file_path)
