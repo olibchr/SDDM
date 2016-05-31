@@ -61,6 +61,7 @@ def load_img_names():
 
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
+
     images = load_img_names()
 
     X_imgs = []
@@ -71,27 +72,27 @@ def load_dataset():
         try:
             face = misc.imread(file_path)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
-            
+
             img_id = img_id[:22]
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
                 y_imgs.append(dic[img_id])
             else:
                 pass
-                
+
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= 10 * BATCH_SIZE:
+        if len(X_imgs) >= 10000:
             break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
     # test_size == valid_size == train_size / 2
     n_imgs = len(X_imgs)
-    train_size = n_imgs / 2
-    test_size = n_imgs / 4
+    train_size = int(n_imgs *0.85)
+    test_size = int(n_imgs *0.1)
     valid_size = n_imgs - train_size - test_size # use all left over imgs
 
     # create sets from the back of the imgs list, since this is more efficient in python
