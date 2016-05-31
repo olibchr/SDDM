@@ -16,7 +16,7 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
             stride=(4, 4),
             nonlinearity=lasagne.nonlinearities.rectify,
             W=lasagne.init.Normal(weight_init_std, weight_init_mean),
-            b=lasagne.init.Constant(0.))
+            b=lasagne.init.Constant(1.))
     network = lasagne.layers.LocalResponseNormalization2DLayer(network)
     network = lasagne.layers.MaxPool2DLayer(network, pool_size=(2, 2))
     # Expert note: Lasagne provides alternative convolutional layers that
