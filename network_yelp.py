@@ -59,14 +59,10 @@ def load_img_names():
 
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
-    
-    
     images = load_img_names()
 
     X_imgs = []
     y_imgs = []
-    
-    count = 0
 
     for img_id in images:
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
@@ -85,7 +81,7 @@ def load_dataset():
             print('No image for %s found in %s' % (img_id, file_path))
             #pass
 
-        if len(X_imgs) >= 3 * BATCH_SIZE:
+        if len(X_imgs) >= 10 * BATCH_SIZE:
             break
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
