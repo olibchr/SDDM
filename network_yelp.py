@@ -61,7 +61,6 @@ def load_img_names():
 
 def load_dataset():
     dic = dictionary(META_DATA_FILE)
-
     images = load_img_names()
 
     X_imgs = []
@@ -71,6 +70,7 @@ def load_dataset():
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
             face = misc.imread(file_path)
+            print "SHAPE:"+str(face.shape)
             face = face.reshape(-1, 1, IMG_X_SIZE, IMG_Y_SIZE)
 
             img_id = img_id[:22]
