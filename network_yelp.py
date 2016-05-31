@@ -28,7 +28,7 @@ IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
 WEIGHT_DECAY = 0.0005
-MAX_IMGS = 10000
+MAX_IMGS = 100000
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
