@@ -236,6 +236,7 @@ def main(model='cnn', num_epochs=50):
             val_err += err
             val_acc += acc
             val_batches += 1
+            print("round %s with acc %s" %(val_batches, val_acc))
 
         # Then we print the results for this epoch:
         print("Epoch {} of {} took {:.3f}s".format(
@@ -255,6 +256,7 @@ def main(model='cnn', num_epochs=50):
         test_err += err
         test_acc += acc
         test_batches += 1
+
     print("Final results:")
     print("  test loss:\t\t\t{:.6f}".format(test_err / test_batches))
     print("  test accuracy:\t\t{:.2f} %".format(
