@@ -10,7 +10,6 @@ from scipy import misc
 import theano
 import theano.tensor as T
 import lasagne
-from lasagne.regularization import regularize_layer_params, regularize_layer_params_weighted, l1
 
 
 # our imports
@@ -171,11 +170,7 @@ def main(model='cnn', num_epochs=200):
 
     loss = lasagne.objectives.categorical_crossentropy(prediction, target_var)
     loss = loss.mean()
-
-    # Also add weight decay to the cost function
-    WEIGHT_DECAY = 0.0005
-    weight_decay = regularize_layer_params(network, l1) * WEIGHT_DECAY
-    loss += weight_decay
+    # We could add some weight decay as well here, see lasagne.regularization.
 
     # learning rate params
     # as per paper we start of with a learn rate of 0.01,
