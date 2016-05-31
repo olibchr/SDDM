@@ -247,7 +247,7 @@ def main(model='cnn', num_epochs=200):
         if theano.tensor.gt(valid_error_prev - valid_error, LEARN_THRESH):
         # if LEARN_THRESH >= valid_error_prev - valid_error:
             print "marginal improvement:" + str(valid_error_prev - valid_error) + ", change learn rate: " + str(LEARN_RATE)
-            LEARN_RATE = LEARN_CHANGE * LEARN_RATE
+            # LEARN_RATE = LEARN_CHANGE * LEARN_RATE
 
         ##### EARLY STOPPING ####
         # if the learning rate becomes consistently worse over a time period specified by "patience",
