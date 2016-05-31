@@ -237,7 +237,7 @@ def main(model='cnn', num_epochs=200):
         ##### EARLY STOPPING ####
         # if the learning rate becomes consistently worse over a time period specified by "patience",
         # the training is stopped to avoid over fitting
-        if valid_error < valid_error_prev:
+        if valid_error <= valid_error_prev:
             valid_error_prev = valid_error
             if valid_error < val_err_best:
                 val_err_best = valid_error
