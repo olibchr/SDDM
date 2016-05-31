@@ -96,6 +96,7 @@ def images_to_mem(image_idx):
     X_imgs = np.squeeze(X_imgs, axis=(1,))
     y_imgs = np.array(y_imgs, dtype=np.int32)
 
+
     print("loaded %s images" % len(X_imgs))
     return X_imgs, y_imgs
 
@@ -118,6 +119,11 @@ def load_dataset():
     X_valid, y_valid = images_to_mem(val_ids)
     X_test, y_test = images_to_mem(test_ids)
     X_train, y_train = images_to_mem(train_ids)
+
+    #### PREPROCESS TRAIN IMGS ####
+    # as specified in the paper subtract the mean activity from the pixels
+    avg = np.mean(X_train)
+    X_train = X_train - avg
 
     del train_ids
     del val_ids
