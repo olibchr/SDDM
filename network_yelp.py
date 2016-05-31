@@ -176,7 +176,7 @@ def main(model='cnn', num_epochs=200):
     # we also use a momentum of 0.9, but in contrast with the paper we use
     # nesterov momentum instead of normal momentum
     params = lasagne.layers.get_all_params(network, trainable=True)
-    lr = theano.shared(np.array(0.01, dtype=theano.shared.floatX))
+    lr = theano.shared(np.array(0.01, dtype=theano.config.floatX))
     updates = lasagne.updates.nesterov_momentum(
             loss, params, learning_rate=lr, momentum=0.9)
 
