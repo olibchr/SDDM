@@ -26,8 +26,8 @@ IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
-BATCH_SIZE = 192 # Batch size
-MAX_IMGS = 10000
+BATCH_SIZE = 2 # Batch size
+MAX_IMGS = 10
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -84,8 +84,13 @@ def images_to_mem(image_idx):
             if img_id in dic:
                 X_imgs.append(face / np.float32(256))
                 X_imgs.append(face_lr / np.float32(256))
-                y_imgs.append(dic[img_id])
-                y_imgs.append(dic[img_id])
+                y_vec = [0] * N_CLASSES
+                y_vec[dic[img_id]] = 1
+                print(y_vec)
+                print(dic[img_id])
+                y_imgs.append(y_vec)
+                y_imgs.append(y_vec)
+
 
         except Exception as e:
             print('No image for %s found in %s' % (img_id, file_path))
