@@ -15,8 +15,7 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
             network, num_filters=48, filter_size=(11, 11),
             stride=(4, 4),
             nonlinearity=lasagne.nonlinearities.rectify,
-            W=lasagne.init.Normal(weight_init_std, weight_init_mean),
-            b=lasagne.init.Constant(1.))
+            W=lasagne.init.Normal(weight_init_std, weight_init_mean))
     network = lasagne.layers.LocalResponseNormalization2DLayer(network)
     network = lasagne.layers.MaxPool2DLayer(network, pool_size=(2, 2))
     # Expert note: Lasagne provides alternative convolutional layers that
@@ -27,7 +26,8 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
     network = lasagne.layers.Conv2DLayer(
             network, num_filters=128, filter_size=(5, 5),
             nonlinearity=lasagne.nonlinearities.rectify,
-            W=lasagne.init.Normal(weight_init_std, weight_init_mean))
+            W=lasagne.init.Normal(weight_init_std, weight_init_mean),
+            b=lasagne.init.Constant(1.))
     network = lasagne.layers.LocalResponseNormalization2DLayer(network)
     network = lasagne.layers.MaxPool2DLayer(network, pool_size=(2, 2))
 
@@ -40,12 +40,16 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
     # IMG_NET: 3x3 conv 13x13x192
     network = lasagne.layers.Conv2DLayer(
             network, num_filters=192, filter_size=(3, 3),
-            nonlinearity=lasagne.nonlinearities.rectify)
+            nonlinearity=lasagne.nonlinearities.rectify,
+            W=lasagne.init.Normal(weight_init_std, weight_init_mean),
+            b=lasagne.init.Constant(1.))
 
     # IMG_NET: 3x3 conv 13x13x128 + pool
     network = lasagne.layers.Conv2DLayer(
             network, num_filters=128, filter_size=(3, 3),
-            nonlinearity=lasagne.nonlinearities.rectify)
+            nonlinearity=lasagne.nonlinearities.rectify,
+            W=lasagne.init.Normal(weight_init_std, weight_init_mean),
+            b=lasagne.init.Constant(1.))
     network = lasagne.layers.MaxPool2DLayer(network, pool_size=(2, 2))
 
     # IMG_NET: dense 2048
@@ -53,20 +57,23 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
             lasagne.layers.dropout(network, p=.5),
             num_units=2048,
             nonlinearity=lasagne.nonlinearities.rectify,
-            W=lasagne.init.Normal(weight_init_std, weight_init_mean))
+            W=lasagne.init.Normal(weight_init_std, weight_init_mean),
+            b=lasagne.init.Constant(1.))
 
     # IMG_NET: dense 2048
     network = lasagne.layers.DenseLayer(
             lasagne.layers.dropout(network, p=.5),
             num_units=2048,
             nonlinearity=lasagne.nonlinearities.rectify,
-            W=lasagne.init.Normal(weight_init_std, weight_init_mean))
+            W=lasagne.init.Normal(weight_init_std, weight_init_mean),
+            b=lasagne.init.Constant(1.))
 
     # Output Layer
     network = lasagne.layers.DenseLayer(
             lasagne.layers.dropout(network, p=.5),
             num_units=n_classes,
             nonlinearity=lasagne.nonlinearities.softmax,
-            W=lasagne.init.Normal(weight_init_std, weight_init_mean))
+            W=lasagne.init.Normal(weight_init_std, weight_init_mean),
+            b=lasagne.init.Constant(1.))
 
     return network
