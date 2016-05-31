@@ -96,6 +96,7 @@ def load_dataset():
 
     print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
+
     # test_size == valid_size == train_size / 2
     n_imgs = len(X_imgs)
     train_size = int(n_imgs *0.8)
@@ -108,6 +109,11 @@ def load_dataset():
     y_train = np.array(y_imgs[-train_size:], dtype=np.int32)
     del X_imgs[-train_size:]
     del y_imgs[-train_size:]
+
+    #### PREPROCESS TRAIN IMGS ####
+    # as specified in the paper subtract the mean activity from the pixels
+    avg = np.mean(X_train)
+    print "AVG:" + str(avg)
 
     X_test = np.array(X_imgs[-test_size:], dtype=theano.config.floatX)
     X_test = np.squeeze(X_test, axis=(1,))
