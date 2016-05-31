@@ -28,11 +28,11 @@ IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
 WEIGHT_DECAY = 0.0005
-MAX_IMGS = 100000
+MAX_IMGS = 10000
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
-    print "Loading meta data"
+    #print "Loading data"
     dic = {}
     with open(META_DATA_FILE, 'rb') as f:
         reader = csv.reader(f)
@@ -82,8 +82,8 @@ def images_to_mem(image_idx):
             print('No image for %s found in %s' % (img_id, file_path))
             pass
 
-        if len(X_imgs) >= MAX_IMGS:
-           break
+        #if len(X_imgs) >= MAX_IMGS:
+           #break
 
     X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
     X_imgs = np.squeeze(X_imgs, axis=(1,))
@@ -95,6 +95,7 @@ def images_to_mem(image_idx):
 def load_dataset():
 
     image_ids = load_img_names()
+    image_ids = image_ids[:MAX_IMGS]
     n_imgs = len(image_ids)
 
     # test_size == valid_size == train_size / 2
