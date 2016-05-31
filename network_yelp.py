@@ -217,7 +217,7 @@ def main(model='cnn', num_epochs=200):
     valid_error_best = float('inf')
     valid_error_prev = float('inf')
     params_best = lasagne.layers.get_all_param_values(network)
-    degrading_patience = int('inf')
+    degrading_patience = sys.maxint
     degrading_count = 0
     for epoch in range(num_epochs):
         # In each epoch, we do a full pass over the training data:
