@@ -245,7 +245,7 @@ def main(model='cnn', num_epochs=200):
         print("  validation accuracy:\t\t{:.2f} %".format(
             val_acc / val_batches * 100))
 
-        print LEARN_RATE
+        print LEARN_RATE.eval()
         exit(1)
 
         ### LEARN RATE CHANGE ###
