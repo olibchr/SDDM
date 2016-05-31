@@ -27,15 +27,6 @@ IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 192 # Batch size
 
-# learning rate params
-# as per paper we start of with a learn rate of 0.01,
-# if the error on the validation set does not improve significantly,
-# thus is lower than LEARN_TRHESH, it is divided by 10 (or in our case,
-# multiplied by LEARN_CHANGE
-LEARN_RATE = theano.shared(np.array(0.01, dtype=theano.config.floatX))
-LEARN_THRESH = theano.shared(np.array(0.001, dtype=theano.config.floatX))
-LEARN_CHANGE = theano.shared(np.array(0.1, dtype=theano.config.floatX))
-
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
     print "Loading meta data"
@@ -181,12 +172,21 @@ def main(model='cnn', num_epochs=200):
     loss = loss.mean()
     # We could add some weight decay as well here, see lasagne.regularization.
 
+    # learning rate params
+    # as per paper we start of with a learn rate of 0.01,
+    # if the error on the validation set does not improve significantly,
+    # thus is lower than LEARN_TRHESH, it is divided by 10 (or in our case,
+    # multiplied by LEARN_CHANGE
+    LEARN_RATE = theano.shared(np.array(0.01, dtype=theano.config.floatX))
+    LEARN_THRESH = theano.shared(np.array(0.001, dtype=theano.config.floatX))
+    LEARN_CHANGE = theano.shared(np.array(0.1, dtype=theano.config.floatX))
+
     # as per paper we use an initial learning rate of 0.01
     # we also use a momentum of 0.9, but in contrast with the paper we use
     # nesterov momentum instead of normal momentum
     params = lasagne.layers.get_all_params(network, trainable=True)
     updates = lasagne.updates.nesterov_momentum(
-            loss, params, learning_rate= global LEARN_RATE, momentum=0.9)
+            loss, params, learning_rate=LEARN_RATE, momentum=0.9)
 
     # Create a loss expression for validation/testing. The crucial difference
     # here is that we do a deterministic forward pass through the network,
