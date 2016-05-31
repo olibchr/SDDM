@@ -100,8 +100,8 @@ def load_dataset():
     #print ("loaded imgs: all %s with %s targets" % ((len(X_imgs)), len(y_imgs)))
 
     # test_size == valid_size == train_size / 2
-    train_size = int(n_imgs * 0.7)
-    test_size = int(n_imgs * 0.15)
+    train_size = int(n_imgs * 0.85)
+    test_size = int(n_imgs * 0.10)
     val_size = n_imgs - train_size - test_size # use all left over imgs
 
     train_ids=image_ids[:train_size]
