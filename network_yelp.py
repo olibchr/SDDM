@@ -71,7 +71,7 @@ def images_to_mem(image_ids):
     for img_id in image_ids:
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
-            face = misc.imread(file_path, mode='L')
+            face = misc.imread(file_path, flatten=True)
 
             #### DATA AUGMENTATION ####
             # as per paper add the (horizontal) mirror image of each img
