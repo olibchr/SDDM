@@ -74,6 +74,6 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
     # Output Layer
     network = lasagne.layers.DenseLayer(
             num_units=1,
-            nonlinearity=lasagne.nonlinearities.linear,)
+            nonlinearity=lasagne.nonlinearities.linear)
 
     return network
