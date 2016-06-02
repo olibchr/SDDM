@@ -26,7 +26,7 @@ IMG2SHOP_FILE = 'meta/photo_id_to_business_id.json'
 IMG_NAMES_FILE = 'meta/img_names.txt'
 IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
-BATCH_SIZE = 64 # Batch size
+BATCH_SIZE = 1 # Batch size
 WEIGHT_DECAY = 0.0005
 MAX_IMGS = 10000
 
