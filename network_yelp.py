@@ -184,7 +184,7 @@ def main(model='cnn', num_epochs=200):
     prediction = lasagne.layers.get_output(network)
     print(prediction)
 
-    loss = lasagne.objectives.categorical_crossentropy(prediction, target_var)
+    loss = lasagne.objectives.squared_error(prediction, target_var)
     loss = loss.mean()
 
     # Also add weight decay to the cost function
@@ -211,7 +211,7 @@ def main(model='cnn', num_epochs=200):
     # here is that we do a deterministic forward pass through the network,
     # disabling dropout layers.
     test_prediction = lasagne.layers.get_output(network, deterministic=True)
-    test_loss = lasagne.objectives.categorical_crossentropy(test_prediction,
+    test_loss = lasagne.objectives.squared_error(test_prediction,
                                                             target_var)
     test_loss = test_loss.mean()
     # As a bonus, also create an expression for the classification accuracy:
