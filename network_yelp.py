@@ -28,7 +28,7 @@ IMG_Y_SIZE = 224
 IMG_X_SIZE = 224
 BATCH_SIZE = 64 # Batch size
 WEIGHT_DECAY = 0.0005
-MAX_IMGS = 10000
+MAX_IMGS = 100000
 
 # ################## Network ##################
 def dictionary(META_DATA_FILE):
@@ -71,7 +71,7 @@ def images_to_mem(image_ids):
     for img_id in image_ids:
         file_path = IMG_DIR + img_id[:-1] + '.jpg' # -1 to remove "\n" at end of line
         try:
-            face = misc.imread(file_path, flatten=True)
+            face = misc.imread(file_path)
 
             #### DATA AUGMENTATION ####
             # as per paper add the (horizontal) mirror image of each img
@@ -94,7 +94,7 @@ def images_to_mem(image_ids):
 
 
     X_imgs = np.array(X_imgs, dtype=theano.config.floatX)
-    X_imgs = np.squeeze(X_imgs)
+    X_imgs = np.squeeze(X_imgs, axis=(1,))
     y_imgs = np.array(y_imgs, dtype=np.int32)
 
     print("loaded %s images" % len(X_imgs))
