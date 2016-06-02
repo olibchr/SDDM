@@ -70,11 +70,10 @@ def build(image_x_size, image_y_size, n_classes, input_var=None):
             W=lasagne.init.Normal(weight_init_std, weight_init_mean),
             b=lasagne.init.Constant(1.))
 
+
     # Output Layer
     network = lasagne.layers.DenseLayer(
             num_units=1,
-            nonlinearity=lasagne.nonlinearities.linear,
-            W=lasagne.init.Normal(weight_init_std, weight_init_mean),
-            b=lasagne.init.Constant(1.))
+            nonlinearity=lasagne.nonlinearities.linear,)
 
     return network
