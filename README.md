@@ -1,4 +1,4 @@
-# SDDM
+# Distributed Data Mining
 
 Convolutional Neural Network in Phyton for the Yelp Data Challenge 2016
 
