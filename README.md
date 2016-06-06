@@ -1,4 +1,9 @@
 # SDDM
 
+Convolutional Neural Network in Phyton for the Yelp Data Challenge 2016
 
-http://stackoverflow.com/questions/954302/how-to-make-a-programme-continue-to-run-after-log-out-from-ssh
+Objective: Predict restaurant ratings based on images.
+
+Libraries: Theano & Lasagne
+
+Still under development. Find recent code in Dev Branch. 
